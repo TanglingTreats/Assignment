@@ -1,7 +1,7 @@
 /*
  Program: fileRead.h
  Created on: 13 Feb 2020
- Edited on: 13 Feb 2020
+ Edited on: 4 Mar 2020
  Created by: Edwin
 */
 
@@ -22,6 +22,8 @@ typedef struct op_store
     int* operand;
 } Op_store;
 
-bool readFile (char* file);
+typedef char String[1024];
+
+bool readFile (FILE* file, char* comm, int* data);
 
 #endif

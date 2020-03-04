@@ -1,7 +1,7 @@
 #include "contiguous.h"
 
 void contiguous_add(Ctg_file_dir file_dir, Vcb *vol_blk, Block *block_Array,
-                    int numberOfEntries, int *data, int *entries)
+                    int numberOfBlocksNeeded, int *data, int *entries)
 {
 }
 

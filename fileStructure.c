@@ -94,3 +94,12 @@ int checkFreeSpace(Vcb *vol_Blk)
 
     return vol_Blk->numFreeData;
 }
+
+int nextFreeSpaceIndex(Vcb *vol_Blk)
+{
+    for (int i = 0; i < vol_Blk->numTotal; i++)
+    {
+        if (vol_Blk->freeBlock[i] == 0)
+            return i;
+    }
+}

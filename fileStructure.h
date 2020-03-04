@@ -98,4 +98,7 @@ void printAllocateError(char *input);
 // Updates and returns number of free blocks
 int checkFreeSpace(Vcb *vol_Blk);
 
+// Returns index of next free block
+int nextFreeSpaceIndex(Vcb *vol_Blk);
+
 #endif

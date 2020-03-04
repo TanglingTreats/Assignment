@@ -18,14 +18,15 @@
 #include "fileStructure.h"
 #include "constant.h"
 #include "fileRead.h"
+#include "contiguous.h"
 
 #define DEBUG 0
 
 // ---- Function Prototype ----
 void printInputError();
-void freePointers(int* entries, Block* block_Array, File_dir* file_dir);
+void freePointers(int *entries, Block *block_Array, File_dir *file_dir);
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     // Global variables in fileStructure.h
     extern int blockSize;
@@ -44,10 +45,10 @@ int main(int argc, char** argv)
     int choice = -1;
 
     // File data and block pointer integer array
-    int* entries;
+    int *entries;
 
     // Blocks to track entries
-    Block* block_Array;
+    Block *block_Array;
 
     // File directory struct that contains other file structures
     File_dir file_dir;
@@ -58,7 +59,7 @@ int main(int argc, char** argv)
     vol_Blk.numTotal = 0;
 
     // File pointer
-    FILE* fp;
+    FILE *fp;
 
     printf("\n---------- Shrodinger's OS ------------\n");
     printf("\nWelcome User\n");
@@ -66,16 +67,16 @@ int main(int argc, char** argv)
     printf("Current block size is: %d\n", vol_Blk.blockSize);
     printf("Current number of blocks is: %d\n", vol_Blk.numTotal);
 
-    while(option != 's' && option != 'n')
+    while (option != 's' && option != 'n')
     {
         printf("\nWould you like to input block size or number of blocks? s/n: ");
         scanf(" %c", &option);
-        if(option == 's')
+        if (option == 's')
         {
             printf("Please input your desired block size: ");
             scanf("%d", &vol_Blk.blockSize);
         }
-        else if(option == 'n')
+        else if (option == 'n')
         {
             printf("Please input your desired number of blocks: ");
             scanf("%d", &vol_Blk.numTotal);
@@ -93,7 +94,7 @@ int main(int argc, char** argv)
     printf("Your desired number of blocks is: %d\n", vol_Blk.numTotal);
 
     // Allocate memory after block calculation
-    if(allocateMemory(&entries, vol_Blk))
+    if (allocateMemory(&entries, &vol_Blk))
     {
         printf("\nMemory allocation successful!\n");
     }
@@ -103,24 +104,24 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    if(allocateBlock(&block_Array, vol_Blk, &file_dir))
+    if (allocateBlock(&block_Array, &vol_Blk, &file_dir))
     {
         printf("\nBlock allocation successful!\n");
 
-        // Debug block allocation
-        #if DEBUG
+// Debug block allocation
+#if DEBUG
         int i;
-        for(i = 0; i < vol_Blk.numData; i++)
+        for (i = 0; i < vol_Blk.numData; i++)
         {
             printf("Index: %d. Start: %d. End: %d.\n", block_Array[i].index, block_Array[i].start, block_Array[i].end);
         }
-        for(i = 0; i < vol_Blk.numDirBlock; i++)
+        for (i = 0; i < vol_Blk.numDirBlock; i++)
         {
             printf("contiguous %d\n", file_dir.ctg_block[i].identifier);
             printf("linked %d\n", file_dir.linked_block[i].identifier);
             printf("index %d\n", file_dir.indexed_block[i].identifier);
         }
-        #endif
+#endif
     }
     else
     {
@@ -130,13 +131,13 @@ int main(int argc, char** argv)
     }
 
     fp = fopen("CSC1007-SampleCSV.csv", "r");
-    if(fp != NULL)
+    if (fp != NULL)
     {
         printf("File read successful");
     }
 
     // Main program loop
-    while(true)
+    while (true)
     {
         printf("\nWhat would you like to do now? Key in a number:\n");
         printf("0 - Contiguous Allocation\n");
@@ -147,11 +148,12 @@ int main(int argc, char** argv)
 
         // Read in an integer
         scanf("%d", &choice);
-        while(getchar() != '\n');   //Error-checking for character and string inputs
+        while (getchar() != '\n')
+            ; //Error-checking for character and string inputs
 
-        if(choice >= 0 && choice < 4)
+        if (choice >= 0 && choice < 4)
         {
-            // Execute allocation methods etc. 
+            // Execute allocation methods etc.
             char comm[7];
             int* fileData;
             while(readFile(fp, comm, &fileData))
@@ -167,9 +169,8 @@ int main(int argc, char** argv)
 
             // Reset choice
             choice = -1;
-            
         }
-        else if(choice == 4)
+        else if (choice == 4)
         {
             break;
         }
@@ -180,7 +181,7 @@ int main(int argc, char** argv)
     }
 
     freePointers(entries, block_Array, &file_dir);
-    
+
     printf("\nThank you for using Shrodinger's OS\n");
     printf("\n----------- End of Program ------------\n");
     return 0;
@@ -193,19 +194,19 @@ void printInputError()
     printf("\nInvalid input detected. Please try again.\n");
 }
 
-void freePointers(int* entries, Block* block_Array, File_dir* file_dir)
+void freePointers(int *entries, Block *block_Array, File_dir *file_dir)
 {
     printf("\nFree contiguous\n");
     free(file_dir->ctg_block);
-    
+
     printf("Free linked\n");
     free(file_dir->linked_block);
-    
+
     printf("Free indexed\n");
     free(file_dir->indexed_block);
 
     //unique file needs to be freed
-    
+
     printf("Free blocks\n");
     free(block_Array);
 

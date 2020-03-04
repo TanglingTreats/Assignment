@@ -19,7 +19,7 @@
 #include "constant.h"
 #include "fileRead.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 // ---- Function Prototype ----
 void printInputError();
@@ -56,6 +56,9 @@ int main(int argc, char** argv)
     Vcb vol_Blk;
     vol_Blk.blockSize = 0;
     vol_Blk.numTotal = 0;
+
+    // File pointer
+    FILE* fp;
 
     printf("\n---------- Shrodinger's OS ------------\n");
     printf("\nWelcome User\n");
@@ -103,6 +106,7 @@ int main(int argc, char** argv)
     if(allocateBlock(&block_Array, vol_Blk, &file_dir))
     {
         printf("\nBlock allocation successful!\n");
+
         // Debug block allocation
         #if DEBUG
         int i;
@@ -125,14 +129,11 @@ int main(int argc, char** argv)
         return 2;
     }
 
-    // if(readFile("CSC1007-SampleCSV.csv"))
-    // {
-    //     printf("File read successful");
-    // }
-    // else
-    // {
-    //     printf("Failed to read file");
-    // }
+    fp = fopen("CSC1007-SampleCSV.csv", "r");
+    if(fp != NULL)
+    {
+        printf("File read successful");
+    }
 
     // Main program loop
     while(true)
@@ -151,6 +152,13 @@ int main(int argc, char** argv)
         if(choice >= 0 && choice < 4)
         {
             // Execute allocation methods etc. 
+            char comm[7];
+            int* fileData;
+            // while(readFile(fp, comm, fileData))
+            // {
+
+
+            // }
             printf("Read file\n");
             printf("Execute file\n");
             printf("Delete\n");

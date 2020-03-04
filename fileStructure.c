@@ -1,7 +1,7 @@
 /*
  Program: fileStructure.c. Contains function definition for file structure.
  Created on: 24 Jan 2020
- Edited on: 3 Feb 2020
+ Edited on: 4 Mar 2020
  Created by: Edwin
 */
 
@@ -43,7 +43,7 @@ bool allocateBlock(Block** data, Vcb vol_Blk, File_dir* dir)
         int i;
         for (i = 0; i < vol_Blk.numData; i++)
         {
-            (*data)[i].index = i;
+            (*data)[i].index = i + vol_Blk.numDirBlock;
             (*data)[i].start = checkEntryPosition (i, vol_Blk);
             (*data)[i].end = (*data)[i].start + vol_Blk.blockSize - 1;
         }

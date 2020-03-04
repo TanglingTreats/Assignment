@@ -31,8 +31,8 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     return;
 }
 
-void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
-                     int identifier, int fileIndex, int *entries)
+int contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
+                    int identifier, int fileIndex, int *entries)
 {
     for (int index = 0; index < vol_Blk->numDirBlock * vol_Blk->blockSize; index++)
     {

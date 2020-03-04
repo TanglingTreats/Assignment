@@ -49,9 +49,9 @@ typedef struct indexed_file_dir
 //Contains struct depending on allocation method
 typedef struct file_dir
 {
-    Ctg_file_dir* ctg_block;
-    Linked_file_dir* linked_block;
-    Indexed_file_dir* indexed_block;
+    Ctg_file_dir *ctg_block;
+    Linked_file_dir *linked_block;
+    Indexed_file_dir *indexed_block;
 } File_dir;
 
 // Volume control block: Stores total number of blocks, number of free blocks, block size and a pointer to the linked list of free blocks.
@@ -62,7 +62,7 @@ typedef struct vcb
 
     // Number of directory blocks given
     int numDirBlock;
-    
+
     // Number of data blocks allowed for storage
     int numData;
 
@@ -71,25 +71,31 @@ typedef struct vcb
 
     // Current block size
     int blockSize;
-    
+
     // Pointer to structure keeping track of free block
-    int* freeBlock;
+    // 0 -> free
+    // 1 -> currently storing data
+    // 2 -> directory
+    int *freeBlock;
 } Vcb;
 
 // Performs calculation of main memory blocks and file directory blocks
-void calculateBlock(Vcb* vcb, char option);
+void calculateBlock(Vcb *vcb, char option);
 
 // Allocate entries for memory according to the specified block size
-bool allocateMemory(int** memory, Vcb vol_Blk);
+bool allocateMemory(int **memory, Vcb *vol_Blk);
 
 // Allocate blocks of memory and file directory according to the inputs
-bool allocateBlock(Block** data, Vcb vol_Blk, File_dir* dir);
+bool allocateBlock(Block **data, Vcb *vol_Blk, File_dir *dir);
 
 // Calculate position of first entry of specified block
-int checkEntryPosition (int blkNumber, Vcb vol_Blk);
+int checkEntryPosition(int blkNumber, Vcb *vol_Blk);
 
-// Prints error message based on input; 
+// Prints error message based on input;
 // "ERROR: Failed to allocate -input-"
-void printAllocateError(char* input);
+void printAllocateError(char *input);
+
+// Updates and returns number of free blocks
+int checkFreeSpace(Vcb *vol_Blk);
 
 #endif

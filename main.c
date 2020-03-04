@@ -94,7 +94,7 @@ int main(int argc, char **argv)
     printf("Your desired number of blocks is: %d\n", vol_Blk.numTotal);
 
     // Allocate memory after block calculation
-    if (allocateMemory(&entries, vol_Blk))
+    if (allocateMemory(&entries, &vol_Blk))
     {
         printf("\nMemory allocation successful!\n");
     }
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    if (allocateBlock(&block_Array, vol_Blk, &file_dir))
+    if (allocateBlock(&block_Array, &vol_Blk, &file_dir))
     {
         printf("\nBlock allocation successful!\n");
 

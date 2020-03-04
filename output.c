@@ -1,14 +1,4 @@
-#include <stdio.h>
-#include <stdbool.h>
-
-#define size 5
-
-int sizes[7] = {1, 2, 5, 10, 13, 26, 65};
-
-char buffer[56][78];
-
-void blocknumber(int x, int y, int counter);
-void indexnumber(int x, int y, int counter);
+#include "output.h"
 
 typedef struct block
 {
@@ -34,18 +24,25 @@ void indexnumber(int x, int y, int counter)
     buffer[y][x + 5] = (char)48 + ones;
 }
 
-void main()
+void calculateVerticalHeight()
 {
+    verticalHeight = (int)(ceil(ceil(130 / size) / 4) * bplusNameHeight);
+}
+
+int printdisk()
+{
+    calculateVerticalHeight();
+
     block one = {true};
     one.contents[0] = 23;
 
     // Drawing Boxes
-    for (int y = 0; y < 57; y++)
+    for (int y = 0; y < verticalHeight + 1; y++)
     {
         for (int x = 0; x < 78; x++)
         {
             buffer[y][x] = ' ';
-            if (y % 8 == 0)
+            if (y % bplusNameHeight == 0)
             {
                 buffer[y][x] = '_';
             }
@@ -65,7 +62,7 @@ void main()
     int indexcounter = 0;
     char blockname[18] = "     block cc     ";
     char titles[18] = "  index  content  ";
-    for (int y = 1; y < 50; y += 8)
+    for (int y = 1; y < verticalHeight - size; y += bplusNameHeight)
     {
         for (int x = 1; x < 78 - 19; x += 19)
         {
@@ -76,7 +73,7 @@ void main()
             }
             blocknumber(x, y, blockcounter);
             blockcounter += 1;
-            for (int z = 2; z < 7; z++)
+            for (int z = 2; z < bplusNameHeight - 1; z++)
             {
                 indexnumber(x, y + z, indexcounter);
                 indexcounter += 1;
@@ -85,11 +82,18 @@ void main()
     }
 
     // Printing
-    for (int y = 0; y < 57; y++)
+    for (int y = 0; y < verticalHeight + 1; y++)
     {
         for (int x = 0; x < 78; x++)
         {
             printf("%c", buffer[y][x]);
         }
     }
+
+    return 0;
+}
+
+int main(void)
+{
+    printdisk();
 }

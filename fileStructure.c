@@ -54,9 +54,9 @@ bool allocateBlock(Block **data, Vcb *vol_Blk, File_dir *dir)
             (*data)[i].end = (*data)[i].start + vol_Blk->blockSize - 1;
         }
 
-        dir->ctg_block = (Ctg_file_dir *)calloc(vol_Blk->numDirBlock, sizeof(Ctg_file_dir));
-        dir->linked_block = (Linked_file_dir *)calloc(vol_Blk->numDirBlock, sizeof(Linked_file_dir));
-        dir->indexed_block = (Indexed_file_dir *)calloc(vol_Blk->numDirBlock, sizeof(Indexed_file_dir));
+        dir->ctg_block = (Ctg_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(Ctg_file_dir));
+        dir->linked_block = (Linked_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(Linked_file_dir));
+        dir->indexed_block = (Indexed_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(Indexed_file_dir));
 
         if (dir->ctg_block == NULL || dir->linked_block == NULL || dir->indexed_block == NULL)
         {
@@ -83,6 +83,26 @@ void printAllocateError(char *input)
     printf("ERROR: Failed to allocate %s\n", input);
 }
 
+int dirUpdator(File_dir *file_dir, Vcb *vol_Blk, char option, int identifier)
+{
+    // contiguous
+    if (option == 'c')
+    {
+        // identifier == -1 means deleting file,
+        // != -1 means adding file
+        if (identifier != -1)
+            for (int i = 0; i < vol_Blk->numDirBlock * vol_Blk->blockSize; i++)
+            {
+                if (file_dir->ctg_block[i].identifier == 0)
+                {
+                    file_dir->ctg_block[i].identifier = identifier;
+                    // return file
+                    return i;
+                }
+            }
+    }
+}
+
 int checkFreeSpace(Vcb *vol_Blk)
 {
     vol_Blk->numFreeData = 0;
@@ -102,4 +122,26 @@ int nextFreeSpaceIndex(Vcb *vol_Blk)
         if (vol_Blk->freeBlock[i] == 0)
             return i;
     }
+}
+
+int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded)
+{
+    for (int i = 0; i < vol_Blk->numTotal; i++)
+    {
+        if (vol_Blk->freeBlock[i] == 0)
+        {
+            bool pass = true;
+            for (int bN = 1; bN < blocksNeeded; bN++)
+            {
+                if (vol_Blk->freeBlock[bN] == 1)
+                    pass = false;
+            }
+            if (pass == true)
+            {
+                return i;
+            }
+        }
+    }
+
+    return -1;
 }

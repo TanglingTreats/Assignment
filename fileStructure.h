@@ -95,10 +95,17 @@ int checkEntryPosition(int blkNumber, Vcb *vol_Blk);
 // "ERROR: Failed to allocate -input-"
 void printAllocateError(char *input);
 
+//
+int dirUpdator(File_dir *file_dir, Vcb *vol_Blk, char option, int identifier);
+
 // Updates and returns number of free blocks
 int checkFreeSpace(Vcb *vol_Blk);
 
 // Returns index of next free block
 int nextFreeSpaceIndex(Vcb *vol_Blk);
+
+// Returns index where x number of contiguous blocks are free for file
+// returns -1 if doesn't exist
+int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded);
 
 #endif

@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 
 typedef struct op_store
 {
@@ -24,6 +25,6 @@ typedef struct op_store
 
 typedef char String[1024];
 
-bool readFile (FILE* file, char* comm, int** data);
+bool readFile (FILE* file, char* comm, int** data, int* size);
 
 #endif

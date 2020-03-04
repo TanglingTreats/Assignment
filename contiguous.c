@@ -17,8 +17,14 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_blk, Block *block_Array,
 
             file_dir->ctg_block[filePosition].start = index * vol_blk->blockSize;
             file_dir->ctg_block[filePosition].length = numberOfData;
+
+            return;
         }
+        printf("Not enough contiguous blocks for data.\n");
+        return;
     }
+    printf("Not enough space for data.\n");
+    return;
 }
 
 void contiguous_read(Ctg_file_dir file_dir, Vcb *vol_blk, Block *block_Array,

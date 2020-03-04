@@ -25,6 +25,6 @@ typedef struct op_store
 
 typedef char String[1024];
 
-bool readFile (FILE* file, char* comm, int** data, int* size);
+bool readFile (FILE *file, char *comm, int **data, int *size);
 
 #endif

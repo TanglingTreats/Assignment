@@ -155,75 +155,91 @@ int main(int argc, char **argv)
         {
             // Execute allocation methods etc.
             char comm[7];
+
+            // Contains all information about the file that is to be added, read or deleted
+            int *fileInfo;
+
+            // Contains only the data about the file
             int *fileData;
-            int size = 0;
-            while(readFile(fp, comm, &fileData, &size))
+
+            // The integer identifier of the file
+            int fileIdentifier = 0;
+
+            //  The total size of the file including the identifier
+            int fileDataSize = 0;
+
+            // Number of blocks needed to store a particular file
+            int numOfBlocksNeeded = 0;
+            while(readFile(fp, comm, &fileInfo, &fileDataSize))
             {
                 printf("The command is: %s\n", comm);
+                fileIdentifier = fileInfo[0];
 
                 //Loop through as long as there is a line to read
-                int k;
-                for(k = 0; k < size; k++)
+                if(!strcmp(comm, "add"))
                 {
-                    if(!strcmp(comm, "add"))
+                    int numOfBlocksNeeded = ceil(((float)fileDataSize - 1) / vol_Blk.blockSize);
+
+                    // Initialise data of file
+                    fileData = &fileInfo[1];
+
+                    if(choice == 0)
                     {
-                        if(choice == 0)
-                        {
-                            printf("Adding file - contiguous\n");
-                        }
-                        else if(choice == 1)
-                        {
-                            printf("Adding file - linked\n");
-                        }
-                        else if(choice == 2)
-                        {
-                            printf("Adding file - index\n");
-                        }
-                        else if(choice == 3)
-                        {
-                            
-                        }
+                        printf("Adding file - contiguous\n");
                     }
-                    else if(!strcmp(comm, "read"))
+                    else if(choice == 1)
                     {
-                        if(choice == 0)
-                        {
-                            printf("Reading block - contiguous\n");
-                        }
-                        else if(choice == 1)
-                        {
-                            printf("Reading block - linked\n");
-                        }
-                        else if(choice == 2)
-                        {
-                            printf("Reading block - index\n");
-                        }
-                        else if(choice == 3)
-                        {
-                            
-                        }
+                        printf("Adding file - linked\n");
+                    }
+                    else if(choice == 2)
+                    {
+                        printf("Adding file - index\n");
+                    }
+                    else if(choice == 3)
+                    {
                         
                     }
-                    else if(!strcmp(comm, "delete"))
+                }
+                // If reading, fileInfo has only 1 element inside
+                else if(!strcmp(comm, "read"))
+                {
+                    if(choice == 0)
                     {
-                        if(choice == 0)
-                        {
-                            printf("Deleting block - contiguous\n");
-                        }
-                        else if(choice == 1)
-                        {
-                            printf("Deleting block - linked\n");
-                        }
-                        else if(choice == 2)
-                        {
-                            printf("Deleting block - index\n");
-                        }
-                        else if(choice == 3)
-                        {
-                            
-                        }
+                        printf("Reading block - contiguous\n");
                     }
-                    printf("Inside: %i\n", fileData[k]);
+                    else if(choice == 1)
+                    {
+                        printf("Reading block - linked\n");
+                    }
+                    else if(choice == 2)
+                    {
+                        printf("Reading block - index\n");
+                    }
+                    else if(choice == 3)
+                    {
+                        
+                    }
+                    
+                }
+                // If deleting, fileInfo has only 1 element inside
+                else if(!strcmp(comm, "delete"))
+                {
+                    if(choice == 0)
+                    {
+                        printf("Deleting block - contiguous\n");
+                    }
+                    else if(choice == 1)
+                    {
+                        printf("Deleting block - linked\n");
+                    }
+                    else if(choice == 2)
+                    {
+                        printf("Deleting block - index\n");
+                    }
+                    else if(choice == 3)
+                    {
+                        
+                    }
                 }
 
             }

@@ -1,4 +1,5 @@
 #ifndef CONTIGUOUS_H
+#define CONTIGUOUS_H
 
 #include "fileStructure.h"
 

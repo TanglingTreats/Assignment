@@ -154,11 +154,13 @@ int main(int argc, char** argv)
             // Execute allocation methods etc. 
             char comm[7];
             int* fileData;
-            // while(readFile(fp, comm, fileData))
-            // {
+            while(readFile(fp, comm, &fileData))
+            {
+                printf("The command is: %s\n", comm);
+                printf("Size of command file %li\n", sizeof(fileData)/sizeof(fileData[0]));
+                printf("Successfully read file\n");
 
-
-            // }
+            }
             printf("Read file\n");
             printf("Execute file\n");
             printf("Delete\n");

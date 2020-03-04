@@ -7,15 +7,50 @@
 
 #include "fileRead.h"
 
-bool readFile (FILE* file, char* comm, int* data)
+bool readFile (FILE* file, char* comm, int** data)
 {
     //counter for getting number of lines
     int counter = 0;
 
-    char oldBuf[1024];
     char buf[1024];
+    char intBuf[3];
 
-    String command[100];
+    bool setComm = false;
+    bool setData = false;
 
-    return true;
+    if(fgets(buf, 1024, file))
+    {
+        int i;
+        int j = 0;
+        printf("This is one command: %s\n", buf);
+        for(i = 0; i < strlen(buf); i++)
+        {
+            if(buf[i] == ',')
+            {
+                if(!setComm)
+                {
+                    comm[j] = '\0';
+                    //printf("The command is: %s\n", comm);
+                    setComm = true;
+                    j = 0;
+
+                    *data = (int *)calloc(strlen(buf)-i / 5, sizeof(int));
+                    break;
+                }
+                i += 2;
+            }
+            if(!setComm)
+            {
+                comm[j] = buf[i];
+                j++;
+            }
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+    
 }

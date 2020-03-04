@@ -7,7 +7,7 @@
 
 #include "fileRead.h"
 
-bool readFile (FILE* file, char* comm, int** data)
+bool readFile (FILE *file, char *comm, int **data, int* size)
 {
     //counter for getting number of lines
     int counter = 0;
@@ -22,7 +22,8 @@ bool readFile (FILE* file, char* comm, int** data)
     {
         int i;
         int j = 0;
-        printf("This is one command: %s\n", buf);
+        int k = 0;
+
         for(i = 0; i < strlen(buf); i++)
         {
             if(buf[i] == ',')
@@ -30,19 +31,42 @@ bool readFile (FILE* file, char* comm, int** data)
                 if(!setComm)
                 {
                     comm[j] = '\0';
-                    //printf("The command is: %s\n", comm);
                     setComm = true;
                     j = 0;
 
-                    *data = (int *)calloc(strlen(buf)-i / 5, sizeof(int));
-                    break;
+                    // Calculates length of remaining command
+                    float remainLen = strlen(buf)-i-2; 
+                    
+                    int sizeOfData = ceil(remainLen / 5);
+
+                    (*data) = (int *)calloc(sizeOfData, sizeof(int));
+                    *size = sizeOfData;
+
+                    setData = true;
                 }
+
                 i += 2;
             }
+
             if(!setComm)
             {
                 comm[j] = buf[i];
                 j++;
+            }
+
+            if(setData)
+            {
+                intBuf[j] = buf[i];
+                j++;
+
+                if(j == 3)
+                {
+                    (*data)[k] = atoi(intBuf);
+
+                    j = 0;
+                    k++; 
+                }
+
             }
         }
         return true;

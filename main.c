@@ -24,7 +24,7 @@
 
 // ---- Function Prototype ----
 void printInputError();
-void freePointers(int *entries, Block *block_Array, File_dir *file_dir);
+void freePointers(int *entries, Block *block_Array, File_dir *file_dir, FILE *file);
 
 int main(int argc, char **argv)
 {
@@ -108,8 +108,8 @@ int main(int argc, char **argv)
     {
         printf("\nBlock allocation successful!\n");
 
-// Debug block allocation
-#if DEBUG
+        // Debug block allocation
+        #if DEBUG
         int i;
         for (i = 0; i < vol_Blk.numData; i++)
         {
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
             printf("linked %d\n", file_dir.linked_block[i].identifier);
             printf("index %d\n", file_dir.indexed_block[i].identifier);
         }
-#endif
+        #endif
     }
     else
     {
@@ -154,21 +154,82 @@ int main(int argc, char **argv)
         if (choice >= 0 && choice < 4)
         {
             // Execute allocation methods etc.
-            // char comm[7];
-            // int* fileData;
-            // while(readFile(fp, comm, &fileData))
-            // {
-            //     printf("The command is: %s\n", comm);
-            //     printf("Size of command file %li\n", sizeof(fileData)/sizeof(fileData[0]));
-            //     printf("Successfully read file\n");
+            char comm[7];
+            int *fileData;
+            int size = 0;
+            while(readFile(fp, comm, &fileData, &size))
+            {
+                printf("The command is: %s\n", comm);
 
-            // }
-            printf("Read file\n");
-            printf("Execute file\n");
-            printf("Delete\n");
+                //Loop through as long as there is a line to read
+                int k;
+                for(k = 0; k < size; k++)
+                {
+                    if(!strcmp(comm, "add"))
+                    {
+                        if(choice == 0)
+                        {
+                            printf("Adding file - contiguous\n");
+                        }
+                        else if(choice == 1)
+                        {
+                            printf("Adding file - linked\n");
+                        }
+                        else if(choice == 2)
+                        {
+                            printf("Adding file - index\n");
+                        }
+                        else if(choice == 3)
+                        {
+                            
+                        }
+                    }
+                    else if(!strcmp(comm, "read"))
+                    {
+                        if(choice == 0)
+                        {
+                            printf("Reading block - contiguous\n");
+                        }
+                        else if(choice == 1)
+                        {
+                            printf("Reading block - linked\n");
+                        }
+                        else if(choice == 2)
+                        {
+                            printf("Reading block - index\n");
+                        }
+                        else if(choice == 3)
+                        {
+                            
+                        }
+                        
+                    }
+                    else if(!strcmp(comm, "delete"))
+                    {
+                        if(choice == 0)
+                        {
+                            printf("Deleting block - contiguous\n");
+                        }
+                        else if(choice == 1)
+                        {
+                            printf("Deleting block - linked\n");
+                        }
+                        else if(choice == 2)
+                        {
+                            printf("Deleting block - index\n");
+                        }
+                        else if(choice == 3)
+                        {
+                            
+                        }
+                    }
+                    printf("Inside: %i\n", fileData[k]);
+                }
 
+            }
             // Reset choice
             choice = -1;
+            fseek(fp, 0, SEEK_SET);
         }
         else if (choice == 4)
         {
@@ -180,7 +241,7 @@ int main(int argc, char **argv)
         }
     }
 
-    freePointers(entries, block_Array, &file_dir);
+    freePointers(entries, block_Array, &file_dir, fp);
 
     printf("\nThank you for using Shrodinger's OS\n");
     printf("\n----------- End of Program ------------\n");
@@ -194,7 +255,7 @@ void printInputError()
     printf("\nInvalid input detected. Please try again.\n");
 }
 
-void freePointers(int *entries, Block *block_Array, File_dir *file_dir)
+void freePointers(int *entries, Block *block_Array, File_dir *file_dir, FILE *file)
 {
     printf("\nFree contiguous\n");
     free(file_dir->ctg_block);
@@ -212,4 +273,8 @@ void freePointers(int *entries, Block *block_Array, File_dir *file_dir)
 
     printf("Free entries\n");
     free(entries);
+
+    printf("Free file pointer\n");
+    free(file);
+
 }

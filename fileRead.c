@@ -7,7 +7,7 @@
 
 #include "fileRead.h"
 
-bool readFile (FILE *file, char *comm, int **data, int* size)
+bool readFile (FILE *file, char *comm, int **data, int *size)
 {
     //counter for getting number of lines
     int counter = 0;

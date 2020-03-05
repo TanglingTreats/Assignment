@@ -8,8 +8,9 @@
  - Prompt desired block size
 
  Error codes:
- 1 - Memory allocation failed
- 2 - Block allocation failed
+ -1 - Memory allocation failed
+ -2 - Block allocation failed
+ -3 - File open failed
 */
 
 #include <stdio.h>
@@ -133,7 +134,12 @@ int main(int argc, char **argv)
     fp = fopen("CSC1007-SampleCSV.csv", "r");
     if (fp != NULL)
     {
-        printf("File read successful");
+        printf("File open successful!\n");
+    }
+    else
+    {
+        printf("\nERROR - File open failed!");
+        return -3;
     }
 
     // Main program loop

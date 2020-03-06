@@ -20,9 +20,10 @@
 #include "constant.h"
 #include "fileRead.h"
 #include "contiguous.h"
+#include "index.h"
 #include "output.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 // ---- Function Prototype ----
 void printInputError();
@@ -202,7 +203,9 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 2)
                     {
-                        printf("Adding file - index\n");
+                        // indexed
+                        index_add(&file_dir, &vol_Blk, numOfBlocksNeeded, fileDataSize - 1,
+                                  fileData, fileIdentifier, entries);
                     }
                     else if (choice == 3)
                     {

@@ -37,7 +37,7 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     while(blksNeeded != ptrsNeeded)
     {
         counter++;
-        printf("Cycle: %i\n", counter);
+        printf("Cycle %i in block calculation\n", counter);
 
         ptrsNeeded = blksNeeded;
 
@@ -48,21 +48,28 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     printf("Pointers needed: %i\n", ptrsNeeded);
     printf("Blocks needed with pointers: %i\n", blksNeeded);
 
-    // Contains list of blocks to store at
-    int *blockPointerArr = (int *) calloc(blksNeeded, sizeof(int));
-    int filled = 0;                                                         // keeps track of whether blockPointerArr 
-                                                                            //is filled
-    // Generate n
-    while (filled != blksNeeded)
+    if(blksNeeded <= checkFreeSpace(vol_Blk))
     {
-        int pointer = (rand() % vol_Blk->numFreeData) + vol_Blk->numDirBlock;
-        printf("Block to store at is: %i\n", pointer);
+        // Contains list of blocks to store at
+        int *blockPointerArr = (int *) calloc(blksNeeded, sizeof(int));
+        int filled = 0;                                                         // keeps track of whether blockPointerArr 
+                                                                                //is filled
+        // Generate indexes of blocks to store data at
+        while (filled != blksNeeded)
+        {
+            int pointer = (rand() % vol_Blk->numFreeData) + vol_Blk->numDirBlock;
 
-        filled++;
+            if(vol_Blk->freeBlock[pointer] == 0)
+            {
+                printf("Block to store at is: %i\n", pointer);
+                filled++;
+            }
+        }
     }
-
-
+    else
+    {
+        printf("ERROR - File size is too big. File not added.");
+    }
     
-
 }
 

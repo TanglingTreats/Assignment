@@ -95,7 +95,7 @@ int checkEntryPosition(int blkNumber, Vcb *vol_Blk);
 // "ERROR: Failed to allocate -input-"
 void printAllocateError(char *input);
 
-//
+// Updates File Directory and returns file's directory index
 int dirUpdator(File_dir *file_dir, Vcb *vol_Blk, char option, int identifier);
 
 // Updates and returns number of free blocks

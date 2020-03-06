@@ -1,9 +1,16 @@
+/*
+ Program: contiguous.h. Contains contiguous
+ Created on: 4 Mar 2020
+ Edited on: 6 Mar 2020
+ Created by: KAI
+*/
+
 #ifndef CONTIGUOUS_H
 #define CONTIGUOUS_H
 
 #include "fileStructure.h"
 
-void contiguous_add(File_dir *file_dir, Vcb *vol_blk,
+void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
                     int numberOfBlocksNeeded, int numberOfData, int *data,
                     int identifier, int *entries);
 

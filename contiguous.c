@@ -1,6 +1,6 @@
 #include "contiguous.h"
 
-void contiguous_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
+void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
                     int numberOfBlocksNeeded, int numberOfData, int *data,
                     int identifier, int *entries)
 {
@@ -56,24 +56,19 @@ void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
     {
         if (file_dir->ctg_block[index].identifier == identifier)
         {
-            printf("Found");
             int start = file_dir->ctg_block[index].start;
             int length = file_dir->ctg_block[index].length;
-
-            printf("%d, %d", start, length);
 
             // Freeing up free block states
             for (int i = 0; i < length; i++)
             {
-                printf("Freeing");
                 vol_Blk->freeBlock[index + i] = 0;
             }
 
             // Writing -1 to disk
             for (int d = 0; d < length * vol_Blk->blockSize; d++)
             {
-                printf("Writing");
-                entries[index * vol_Blk->blockSize + d] = -1;
+                entries[(index + vol_Blk->numDirBlock) * vol_Blk->blockSize + d] = -1;
             }
 
             // Removing from file directory

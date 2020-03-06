@@ -193,7 +193,7 @@ int main(int argc, char **argv)
                     if (choice == 0)
                     {
                         // printf("Adding file - contiguous\n");
-                        contiguous_add(&file_dir, &vol_Blk, block_Array, numOfBlocksNeeded, fileDataSize - 1, fileData, fileIdentifier, entries);
+                        contiguous_add(&file_dir, &vol_Blk, numOfBlocksNeeded, fileDataSize - 1, fileData, fileIdentifier, entries);
                         printdisk(&vol_Blk, entries);
                     }
                     else if (choice == 1)

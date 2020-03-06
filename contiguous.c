@@ -15,8 +15,9 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
             int filePosition = dirUpdator(file_dir, vol_Blk, 'c', identifier);
 
-            file_dir->ctg_block[filePosition].start = index * vol_Blk->blockSize;
-            file_dir->ctg_block[filePosition].length = numberOfData;
+            // Index + numDirBlock, to adjust for the directory blocks
+            file_dir->ctg_block[filePosition].start = index + vol_Blk->numDirBlock;
+            file_dir->ctg_block[filePosition].length = numberOfBlocksNeeded;
 
             // Changing free block states to occupied
             for (int i = 0; i < numberOfBlocksNeeded; i++)
@@ -38,7 +39,12 @@ int contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
     {
         if (file_dir->ctg_block[index].identifier == identifier)
         {
-            return entries[file_dir->ctg_block[index].start + fileIndex];
+            // - vol_Blk->numDirBlock to adjust for directory blocks
+            int startingBlock = file_dir->ctg_block[index].start - vol_Blk->numDirBlock;
+            // calculating entries index, adjusting for blocks fileIndex
+            int entriesIndex = fileIndex + startingBlock * vol_Blk->blockSize;
+
+            return entries[entriesIndex];
         }
     }
 }
@@ -55,11 +61,11 @@ void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
 
             // Freeing up free block states
             for (int i = 0; i < (int)ceil(length / blockSize); i++)
-                vol_Blk->freeBlock[i] = 1;
+                vol_Blk->freeBlock[i] = 0;
 
-            // Writing 0 to disk
-            for (int d = 0; d < length; d++)
-                entries[index * vol_Blk->blockSize + d] = 0;
+            // Writing -1 to disk
+            for (int d = 0; d < length * vol_Blk->blockSize; d++)
+                entries[index * vol_Blk->blockSize + d] = -1;
 
             // Removing from file directory
             file_dir->ctg_block[index].start = 0;

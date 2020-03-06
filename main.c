@@ -20,6 +20,7 @@
 #include "constant.h"
 #include "fileRead.h"
 #include "contiguous.h"
+#include "linked.h"
 #include "output.h"
 
 #define DEBUG 1
@@ -198,7 +199,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 1)
                     {
-                        printf("Adding file - linked\n");
+                        linked_add(&file_dir, &vol_Blk, block_Array, fileDataSize - 1, fileData, fileIdentifier, entries);
                     }
                     else if (choice == 2)
                     {

@@ -8,10 +8,11 @@
 #ifndef LINKED_H
 #define LINKED_H
 
+#include <math.h>
 #include "fileStructure.h"
 
-void linked_add(File_dir *file_dir, Vcb *vol_blk, Block *block_Array,
-                    int numberOfBlocksNeeded, int numberOfData, int *data,
+void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
+                    float numberOfData, int *data,
                     int identifier, int *entries);
 
 int linked_read(File_dir *file_dir, Vcb *vol_Blk,

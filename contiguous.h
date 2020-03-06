@@ -11,5 +11,5 @@ int contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
                     int identifier, int fileIndex, int *entries);
 
 void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
-                       int identifier, int fileIndex, int *entries);
+                       int identifier, int *entries);
 #endif

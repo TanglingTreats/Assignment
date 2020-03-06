@@ -21,7 +21,7 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
             // Changing free block states to occupied
             for (int i = 0; i < numberOfBlocksNeeded; i++)
-                vol_Blk->freeBlock[i] = 1;
+                vol_Blk->freeBlock[index + i] = 1;
 
             return;
         }
@@ -50,22 +50,31 @@ int contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
 }
 
 void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
-                       int identifier, int fileIndex, int *entries)
+                       int identifier, int *entries)
 {
     for (int index = 0; index < vol_Blk->numDirBlock * vol_Blk->blockSize; index++)
     {
         if (file_dir->ctg_block[index].identifier == identifier)
         {
+            printf("Found");
             int start = file_dir->ctg_block[index].start;
             int length = file_dir->ctg_block[index].length;
 
+            printf("%d, %d", start, length);
+
             // Freeing up free block states
-            for (int i = 0; i < (int)ceil(length / blockSize); i++)
-                vol_Blk->freeBlock[i] = 0;
+            for (int i = 0; i < length; i++)
+            {
+                printf("Freeing");
+                vol_Blk->freeBlock[index + i] = 0;
+            }
 
             // Writing -1 to disk
             for (int d = 0; d < length * vol_Blk->blockSize; d++)
+            {
+                printf("Writing");
                 entries[index * vol_Blk->blockSize + d] = -1;
+            }
 
             // Removing from file directory
             file_dir->ctg_block[index].start = 0;

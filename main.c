@@ -19,6 +19,7 @@
 #include "constant.h"
 #include "fileRead.h"
 #include "contiguous.h"
+#include "output.h"
 
 #define DEBUG 0
 
@@ -108,8 +109,8 @@ int main(int argc, char **argv)
     {
         printf("\nBlock allocation successful!\n");
 
-        // Debug block allocation
-        #if DEBUG
+// Debug block allocation
+#if DEBUG
         int i;
         for (i = 0; i < vol_Blk.numData; i++)
         {
@@ -121,7 +122,7 @@ int main(int argc, char **argv)
             printf("linked %d\n", file_dir.linked_block[i].identifier);
             printf("index %d\n", file_dir.indexed_block[i].identifier);
         }
-        #endif
+#endif
     }
     else
     {
@@ -170,78 +171,76 @@ int main(int argc, char **argv)
 
             // Number of blocks needed to store a particular file
             int numOfBlocksNeeded = 0;
-            while(readFile(fp, comm, &fileInfo, &fileDataSize))
+            while (readFile(fp, comm, &fileInfo, &fileDataSize))
             {
                 printf("The command is: %s\n", comm);
                 fileIdentifier = fileInfo[0];
 
                 //Loop through as long as there is a line to read
-                if(!strcmp(comm, "add"))
+                if (!strcmp(comm, "add"))
                 {
                     int numOfBlocksNeeded = ceil(((float)fileDataSize - 1) / vol_Blk.blockSize);
 
                     // Initialise data of file
                     fileData = &fileInfo[1];
 
-                    if(choice == 0)
+                    if (choice == 0)
                     {
-                        printf("Adding file - contiguous\n");
+                        // printf("Adding file - contiguous\n");
+                        contiguous_add(&file_dir, &vol_Blk, block_Array, numOfBlocksNeeded, fileDataSize - 1, fileData, fileIdentifier, entries);
+                        printdisk(&vol_Blk, entries);
                     }
-                    else if(choice == 1)
+                    else if (choice == 1)
                     {
                         printf("Adding file - linked\n");
                     }
-                    else if(choice == 2)
+                    else if (choice == 2)
                     {
                         printf("Adding file - index\n");
                     }
-                    else if(choice == 3)
+                    else if (choice == 3)
                     {
-                        
                     }
                 }
                 // If reading, fileInfo has only 1 element inside
-                else if(!strcmp(comm, "read"))
+                else if (!strcmp(comm, "read"))
                 {
-                    if(choice == 0)
+                    if (choice == 0)
                     {
                         printf("Reading block - contiguous\n");
                     }
-                    else if(choice == 1)
+                    else if (choice == 1)
                     {
                         printf("Reading block - linked\n");
                     }
-                    else if(choice == 2)
+                    else if (choice == 2)
                     {
                         printf("Reading block - index\n");
                     }
-                    else if(choice == 3)
+                    else if (choice == 3)
                     {
-                        
                     }
-                    
                 }
                 // If deleting, fileInfo has only 1 element inside
-                else if(!strcmp(comm, "delete"))
+                else if (!strcmp(comm, "delete"))
                 {
-                    if(choice == 0)
+                    if (choice == 0)
                     {
-                        printf("Deleting block - contiguous\n");
+                        contiguous_delete(&file_dir, &vol_Blk, fileIdentifier, entries);
+                        printdisk(&vol_Blk, entries);
                     }
-                    else if(choice == 1)
+                    else if (choice == 1)
                     {
                         printf("Deleting block - linked\n");
                     }
-                    else if(choice == 2)
+                    else if (choice == 2)
                     {
                         printf("Deleting block - index\n");
                     }
-                    else if(choice == 3)
+                    else if (choice == 3)
                     {
-                        
                     }
                 }
-
             }
             // Reset choice
             choice = -1;
@@ -292,5 +291,4 @@ void freePointers(int *entries, Block *block_Array, File_dir *file_dir, FILE *fi
 
     printf("Free file pointer\n");
     free(file);
-
 }

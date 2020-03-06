@@ -20,6 +20,7 @@
 #include "constant.h"
 #include "fileRead.h"
 #include "contiguous.h"
+#include "index.h"
 #include "linked.h"
 #include "output.h"
 
@@ -34,7 +35,7 @@ int main(int argc, char **argv)
     // block size for options
     int blkSize = -1;
 
-    // number of blocks for options 
+    // number of blocks for options
     int numOfBlk = -1;
 
     // Character input option: For selecting block size or number of blocks
@@ -78,12 +79,12 @@ int main(int argc, char **argv)
         scanf(" %c", &option);
         if (option == 's')
         {
-            while(blkSize < 2)
+            while (blkSize < 2)
             {
                 printf("\nPlease input your desired block size: ");
                 scanf("%d", &blkSize);
 
-                if(blkSize < 2)
+                if (blkSize < 2)
                 {
                     printf("\nChosen block size cannot be less than 2\n");
                 }
@@ -92,16 +93,15 @@ int main(int argc, char **argv)
                     vol_Blk.blockSize = blkSize;
                 }
             }
-
         }
         else if (option == 'n')
         {
-            while(numOfBlk < 2)
+            while (numOfBlk < 2)
             {
                 printf("\nPlease input your desired number of blocks: ");
                 scanf("%d", &numOfBlk);
 
-                if(numOfBlk < 2)
+                if (numOfBlk < 2)
                 {
                     printf("\nChosen number of blocks cannot be less than 2\n");
                 }
@@ -138,8 +138,8 @@ int main(int argc, char **argv)
     {
         printf("\nBlock allocation successful!\n");
 
-        // Debug block allocation
-        #if DEBUG
+// Debug block allocation
+#if DEBUG
         int i;
         for (i = 0; i < vol_Blk.numData; i++)
         {
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
         }
 
         printf("Number of free blocks: %i\n", vol_Blk.numFreeData);
-        #endif
+#endif
     }
     else
     {
@@ -232,7 +232,9 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 2)
                     {
-                        printf("Adding file - index\n");
+                        // indexed
+                        index_add(&file_dir, &vol_Blk, numOfBlocksNeeded, fileDataSize - 1,
+                                  fileData, fileIdentifier, entries);
                     }
                     else if (choice == 3)
                     {

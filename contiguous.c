@@ -20,11 +20,11 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
             for (int d = 0; d < numberOfData; d++)
                 entries[index * vol_Blk->blockSize + d] = data[d];
 
-            int directory = dirUpdator(file_dir, vol_Blk, 'c', identifier);
+            int directoryIndex = dirUpdator(file_dir, vol_Blk, 'c', identifier);
 
             // Index + numDirBlock, to adjust for the directory blocks
-            file_dir->ctg_block[directory].start = index;
-            file_dir->ctg_block[directory].length = numberOfBlocksNeeded;
+            file_dir->ctg_block[directoryIndex].start = index;
+            file_dir->ctg_block[directoryIndex].length = numberOfBlocksNeeded;
 
             // Changing free block states to occupied
             for (int i = 0; i < numberOfBlocksNeeded; i++)
@@ -32,10 +32,10 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
 
             return;
         }
-        printf("Not enough contiguous blocks for data.\n");
+        printf("\nERROR- Not enough contiguous blocks for data.\n");
         return;
     }
-    printf("Not enough space for data.\n");
+    printf("\nERROR - File is too big for storage\n");
     return;
 }
 

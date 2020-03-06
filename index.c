@@ -10,7 +10,7 @@ void index_add(File_dir *file_dir, Vcb *vol_Blk,
         /* + 1 to account for the index block*/
         numberOfBlocksNeeded + 1 > checkFreeSpace(vol_Blk))
     {
-        printf("File is too big for storing.");
+        printf("\nERROR - File is too big for storage!\n");
         return;
     }
 

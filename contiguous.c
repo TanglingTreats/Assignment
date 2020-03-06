@@ -32,10 +32,10 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
 
             return;
         }
-        printf("Not enough contiguous blocks for data.\n");
+        printf("\nERROR- Not enough contiguous blocks for data.\n");
         return;
     }
-    printf("Not enough space for data.\n");
+    printf("\nERROR - File is too big for storage\n");
     return;
 }
 

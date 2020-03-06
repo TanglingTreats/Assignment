@@ -16,7 +16,7 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
             int filePosition = dirUpdator(file_dir, vol_Blk, 'c', identifier);
 
             // Index + numDirBlock, to adjust for the directory blocks
-            file_dir->ctg_block[filePosition].start = index + vol_Blk->numDirBlock;
+            file_dir->ctg_block[filePosition].start = index;
             file_dir->ctg_block[filePosition].length = numberOfBlocksNeeded;
 
             // Changing free block states to occupied
@@ -32,21 +32,39 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
     return;
 }
 
-int contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
-                    int identifier, int fileIndex, int *entries)
+void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
+                     int data, int *entries)
 {
-    for (int index = 0; index < vol_Blk->numDirBlock * vol_Blk->blockSize; index++)
-    {
-        if (file_dir->ctg_block[index].identifier == identifier)
-        {
-            // - vol_Blk->numDirBlock to adjust for directory blocks
-            int startingBlock = file_dir->ctg_block[index].start - vol_Blk->numDirBlock;
-            // calculating entries index, adjusting for blocks fileIndex
-            int entriesIndex = fileIndex + startingBlock * vol_Blk->blockSize;
+    printf("Reading file: %d\n", data);
+    int block, entryNumber, name;
+    // Print name, block number, entry number
 
-            return entries[entriesIndex];
+    int fileNumber = 0;
+
+    // Go through each file in directory
+    while (file_dir->ctg_block[fileNumber].identifier != 0)
+    {
+        Ctg_file_dir file = file_dir->ctg_block[fileNumber];
+
+        // For each file, scan through all entries, until entry matches data
+        for (int block = 0; block < file.length; block++)
+        {
+            for (int index = 0; index < vol_Blk->blockSize; index++)
+            {
+                int adjustedIndex = index + (block * vol_Blk->blockSize) + (file.start * vol_Blk->blockSize);
+                if (entries[adjustedIndex] == data)
+                {
+                    printf("File Name: %d, Block Number: %d, Entry Number: %d\n",
+                           file.identifier, (block + file.start), adjustedIndex);
+                    return;
+                }
+            }
         }
+        fileNumber += 1;
     }
+    // This is unreachable unless file does not exist
+    printf("File does not exist.");
+    return;
 }
 
 void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
@@ -61,15 +79,11 @@ void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
 
             // Freeing up free block states
             for (int i = 0; i < length; i++)
-            {
                 vol_Blk->freeBlock[index + i] = 0;
-            }
 
             // Writing -1 to disk
             for (int d = 0; d < length * vol_Blk->blockSize; d++)
-            {
-                entries[(index + vol_Blk->numDirBlock) * vol_Blk->blockSize + d] = -1;
-            }
+                entries[start * vol_Blk->blockSize + d] = -1;
 
             // Removing from file directory
             file_dir->ctg_block[index].start = 0;

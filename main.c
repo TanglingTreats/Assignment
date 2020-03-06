@@ -192,9 +192,9 @@ int main(int argc, char **argv)
 
                     if (choice == 0)
                     {
-                        // printf("Adding file - contiguous\n");
-                        contiguous_add(&file_dir, &vol_Blk, numOfBlocksNeeded, fileDataSize - 1, fileData, fileIdentifier, entries);
-                        printdisk(&vol_Blk, entries);
+                        // contiguous
+                        contiguous_add(&file_dir, &vol_Blk, numOfBlocksNeeded, fileDataSize - 1,
+                                       fileData, fileIdentifier, entries);
                     }
                     else if (choice == 1)
                     {
@@ -213,7 +213,8 @@ int main(int argc, char **argv)
                 {
                     if (choice == 0)
                     {
-                        printf("Reading block - contiguous\n");
+                        // contiguous
+                        contiguous_read(&file_dir, &vol_Blk, fileIdentifier, entries);
                     }
                     else if (choice == 1)
                     {
@@ -232,8 +233,8 @@ int main(int argc, char **argv)
                 {
                     if (choice == 0)
                     {
+                        // contiguous
                         contiguous_delete(&file_dir, &vol_Blk, fileIdentifier, entries);
-                        printdisk(&vol_Blk, entries);
                     }
                     else if (choice == 1)
                     {
@@ -248,6 +249,9 @@ int main(int argc, char **argv)
                     }
                 }
             }
+            // Print Output
+            printdisk(&vol_Blk, entries);
+
             // Reset choice
             choice = -1;
             fseek(fp, 0, SEEK_SET);

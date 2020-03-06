@@ -1,7 +1,7 @@
 /*
  Program: fileRead.c
  Created on: 13 Feb 2020
- Edited on: 13 Feb 2020
+ Edited on: 5 Mar 2020
  Created by: Edwin
 */
 
@@ -75,6 +75,4 @@ bool readFile (FILE *file, char *comm, int **data, int *size)
     {
         return false;
     }
-
-    
 }

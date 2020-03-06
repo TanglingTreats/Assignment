@@ -1,3 +1,10 @@
+/*
+ Program: contiguous.c. Contains contiguous
+ Created on: 4 Mar 2020
+ Edited on: 6 Mar 2020
+ Created by: KAI
+*/
+
 #include "contiguous.h"
 
 void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
@@ -13,11 +20,11 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
             for (int d = 0; d < numberOfData; d++)
                 entries[index * vol_Blk->blockSize + d] = data[d];
 
-            int filePosition = dirUpdator(file_dir, vol_Blk, 'c', identifier);
+            int directory = dirUpdator(file_dir, vol_Blk, 'c', identifier);
 
             // Index + numDirBlock, to adjust for the directory blocks
-            file_dir->ctg_block[filePosition].start = index;
-            file_dir->ctg_block[filePosition].length = numberOfBlocksNeeded;
+            file_dir->ctg_block[directory].start = index;
+            file_dir->ctg_block[directory].length = numberOfBlocksNeeded;
 
             // Changing free block states to occupied
             for (int i = 0; i < numberOfBlocksNeeded; i++)

@@ -22,7 +22,7 @@
 #include "contiguous.h"
 #include "output.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 // ---- Function Prototype ----
 void printInputError();

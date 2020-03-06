@@ -35,7 +35,14 @@ void calculateBlock(Vcb *vcb, char option)
 
 bool allocateMemory(int **memory, Vcb *vol_Blk)
 {
-    *memory = (int *)calloc(vol_Blk->numData * vol_Blk->blockSize, sizeof(int));
+    int sizeOfArray = vol_Blk->numData * vol_Blk->blockSize;
+    *memory = (int *)calloc(sizeOfArray, sizeof(int));
+
+    int i;
+    for(i = 0; i < sizeOfArray; i++)
+    {
+        (*memory)[i] = -1;
+    }
 
     return (memory != NULL);
 }

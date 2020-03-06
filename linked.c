@@ -7,10 +7,62 @@
 
 #include "linked.h"
 
-void linked_add(File_dir *file_dir, Vcb *vol_blk, Block *block_Array,
-                    int numberOfBlocksNeeded, int numberOfData, int *data,
+void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
+                    float numberOfData, int *data,
                     int identifier, int *entries)
 {
+    // Calculate number of blocks needed for allocation
+    // Create an array of size of number of blocks needed
+    // Generate a random number from first and last index in block_array
+    // If index is free, add to array
+    // Else, index + 1. Repeat check.
+    // If array is full, start allocation
+
+    // Keeps track of cycle of calculation
+    int counter = 0;
+
+    int ptrsNeeded = 0;
+
+    printf("Number of data: %.0f\n", numberOfData);
     
+    int blksNeeded = ceil((numberOfData + ptrsNeeded) / vol_Blk -> blockSize);           
+    
+    printf("Blocks needed without pointers: %i\n", blksNeeded);
+
+    ptrsNeeded = blksNeeded;
+
+    blksNeeded = ceil((numberOfData + ptrsNeeded) / vol_Blk -> blockSize);
+
+    // Runs if there are not enough pointers given with number of blocks needed for the allocation
+    while(blksNeeded != ptrsNeeded)
+    {
+        counter++;
+        printf("Cycle: %i\n", counter);
+
+        ptrsNeeded = blksNeeded;
+
+        blksNeeded = ceil((numberOfData + ptrsNeeded) / vol_Blk -> blockSize);
+
+    }
+
+    printf("Pointers needed: %i\n", ptrsNeeded);
+    printf("Blocks needed with pointers: %i\n", blksNeeded);
+
+    // Contains list of blocks to store at
+    int *blockPointerArr = (int *) calloc(blksNeeded, sizeof(int));
+    int filled = 0;                                                         // keeps track of whether blockPointerArr 
+                                                                            //is filled
+    // Generate n
+    while (filled != blksNeeded)
+    {
+        int pointer = (rand() % vol_Blk->numFreeData) + vol_Blk->numDirBlock;
+        printf("Block to store at is: %i\n", pointer);
+
+        filled++;
+    }
+
+
+    
+
 }
 

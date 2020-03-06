@@ -14,11 +14,6 @@
 #include <math.h>
 #include "constant.h"
 
-// Global integer to store size of block
-int blockSize;
-// Global integer to store number of blocks
-int numOfBlock;
-
 // Block-type struct that keeps track of start and end of each block
 typedef struct block
 {

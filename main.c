@@ -21,6 +21,7 @@
 #include "fileRead.h"
 #include "contiguous.h"
 #include "index.h"
+#include "linked.h"
 #include "output.h"
 
 #define DEBUG 0
@@ -31,9 +32,11 @@ void freePointers(int *entries, Block *block_Array, File_dir *file_dir, FILE *fi
 
 int main(int argc, char **argv)
 {
-    // Global variables in fileStructure.h
-    extern int blockSize;
-    extern int numOfBlock;
+    // block size for options
+    int blkSize = -1;
+
+    // number of blocks for options
+    int numOfBlk = -1;
 
     // Character input option: For selecting block size or number of blocks
     char option = ' ';
@@ -76,13 +79,37 @@ int main(int argc, char **argv)
         scanf(" %c", &option);
         if (option == 's')
         {
-            printf("Please input your desired block size: ");
-            scanf("%d", &vol_Blk.blockSize);
+            while (blkSize < 2)
+            {
+                printf("\nPlease input your desired block size: ");
+                scanf("%d", &blkSize);
+
+                if (blkSize < 2)
+                {
+                    printf("\nChosen block size cannot be less than 2\n");
+                }
+                else
+                {
+                    vol_Blk.blockSize = blkSize;
+                }
+            }
         }
         else if (option == 'n')
         {
-            printf("Please input your desired number of blocks: ");
-            scanf("%d", &vol_Blk.numTotal);
+            while (numOfBlk < 2)
+            {
+                printf("\nPlease input your desired number of blocks: ");
+                scanf("%d", &numOfBlk);
+
+                if (numOfBlk < 2)
+                {
+                    printf("\nChosen number of blocks cannot be less than 2\n");
+                }
+                else
+                {
+                    vol_Blk.numTotal = numOfBlk;
+                }
+            }
         }
         else
         {
@@ -124,6 +151,8 @@ int main(int argc, char **argv)
             printf("linked %d\n", file_dir.linked_block[i].identifier);
             printf("index %d\n", file_dir.indexed_block[i].identifier);
         }
+
+        printf("Number of free blocks: %i\n", vol_Blk.numFreeData);
 #endif
     }
     else
@@ -136,7 +165,7 @@ int main(int argc, char **argv)
     fp = fopen("CSC1007-SampleCSV.csv", "r");
     if (fp != NULL)
     {
-        printf("File open successful!\n");
+        printf("\nFile open successful!\n");
     }
     else
     {
@@ -180,7 +209,7 @@ int main(int argc, char **argv)
             int numOfBlocksNeeded = 0;
             while (readFile(fp, comm, &fileInfo, &fileDataSize))
             {
-                printf("The command is: %s\n", comm);
+                printf("\nThe command is: %s\n", comm);
                 fileIdentifier = fileInfo[0];
 
                 //Loop through as long as there is a line to read
@@ -199,7 +228,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 1)
                     {
-                        printf("Adding file - linked\n");
+                        linked_add(&file_dir, &vol_Blk, block_Array, fileDataSize - 1, fileData, fileIdentifier, entries);
                     }
                     else if (choice == 2)
                     {
@@ -253,7 +282,7 @@ int main(int argc, char **argv)
                 }
             }
             // Print Output
-            printdisk(&vol_Blk, entries);
+            //printdisk(&vol_Blk, entries);
 
             // Reset choice
             choice = -1;

@@ -47,6 +47,52 @@ void index_add(File_dir *file_dir, Vcb *vol_Blk,
 void index_read(File_dir *file_dir, Vcb *vol_Blk,
                 int data, int *entries)
 {
+    printf("Reading file: %d\n", data);
+    // Get blocksize, easier to work with afterwards
+    int blockSize = vol_Blk->blockSize;
+
+    // Initialise index of file dir to 0
+    int indexOffile_dir = 0;
+    // Access file dir, to find the index blocks on individual files
+    while (file_dir->indexed_block[indexOffile_dir].identifier != 0)
+    {
+
+        // Go into each individual file
+        Indexed_file_dir file = file_dir->indexed_block[indexOffile_dir];
+
+        // Get index of indexblock
+        int indexOfindexBlock = file.pos;
+
+        // initialise indexBlock iterator to 0
+        int indexBlock_iterator = 0;
+
+        // Go through entries of indexBlock
+        while (entries[blockSize * indexOfindexBlock + indexBlock_iterator] != -1)
+        {
+            int blockIndex = entries[blockSize * indexOfindexBlock + indexBlock_iterator];
+            // Go into the blocks that indexBlock is pointing to
+            for (int entriesIndex = 0; entriesIndex < blockSize; entriesIndex++)
+            {
+                int adjustedIndex = blockSize * blockIndex + entriesIndex;
+
+                // Find the data that matches
+                if (entries[adjustedIndex] == data)
+                {
+                    // Prints name, block number, entry number if matches
+                    printf("File Name: %d, Block Number: %d, Entry Number: %d\n",
+                           file.identifier, blockIndex, adjustedIndex);
+                    return;
+                }
+            }
+            // Go to next entry of indexBlock
+            indexBlock_iterator++;
+        }
+        // increment index
+        indexOffile_dir++;
+    }
+    // This is unreachable unless file does not exist
+    printf("File does not exist.");
+    return;
 }
 
 // Deletes File, resets used entries to -1, and frees up blocks

@@ -228,7 +228,8 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 1)
                     {
-                        linked_add(&file_dir, &vol_Blk, block_Array, fileDataSize - 1, fileData, fileIdentifier, entries);
+                        printf("Ignore");
+                        // linked_add(&file_dir, &vol_Blk, block_Array, fileDataSize - 1, fileData, fileIdentifier, entries);
                     }
                     else if (choice == 2)
                     {
@@ -254,7 +255,8 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 2)
                     {
-                        printf("Reading block - index\n");
+                        // index
+                        index_read(&file_dir, &vol_Blk, fileIdentifier, entries);
                     }
                     else if (choice == 3)
                     {
@@ -282,7 +284,7 @@ int main(int argc, char **argv)
                 }
             }
             // Print Output
-            //printdisk(&vol_Blk, entries);
+            printdisk(&vol_Blk, entries);
 
             // Reset choice
             choice = -1;

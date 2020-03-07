@@ -1,7 +1,7 @@
 /*
  Program: main.c. Starting point of the program.
  Created on: 24 Jan 2020
- Edited on: 3 Feb 2020
+ Edited on: 7 Mar 2020
  Created by: Edwin
 
  Algorithm:
@@ -250,7 +250,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 1)
                     {
-                        printf("Reading block - linked\n");
+                        linked_read(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
                     }
                     else if (choice == 2)
                     {

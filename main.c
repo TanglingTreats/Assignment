@@ -228,8 +228,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 1)
                     {
-                        printf("Ignore");
-                        // linked_add(&file_dir, &vol_Blk, block_Array, fileDataSize - 1, fileData, fileIdentifier, entries);
+                        linked_add(&file_dir, &vol_Blk, block_Array, fileDataSize - 1, fileData, fileIdentifier, entries);
                     }
                     else if (choice == 2)
                     {
@@ -276,7 +275,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 2)
                     {
-                        printf("Deleting block - index\n");
+                        index_delete(&file_dir, &vol_Blk, fileIdentifier, entries);
                     }
                     else if (choice == 3)
                     {

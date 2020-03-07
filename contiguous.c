@@ -11,14 +11,16 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
                     int numberOfBlocksNeeded, int numberOfData, int *data,
                     int identifier, int *entries)
 {
+    printf("Adding File: %d\n", identifier);
     if (checkFreeSpace(vol_Blk) >= numberOfBlocksNeeded)
     {
         int index = freeSpaceIndex_contiguous(vol_Blk, numberOfBlocksNeeded);
+        printf("free Index: %d\n", index);
         if (index > -1)
         {
             // Placing data into the entries, adjusted for index position
             for (int d = 0; d < numberOfData; d++)
-                entries[index * vol_Blk->blockSize + d] = data[d];
+                entries[(index - vol_Blk->numDirBlock) * vol_Blk->blockSize + d] = data[d];
 
             int directoryIndex = dirUpdator(file_dir, vol_Blk, 'c', identifier);
 
@@ -58,11 +60,11 @@ void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
         {
             for (int index = 0; index < vol_Blk->blockSize; index++)
             {
-                int adjustedIndex = index + (block * vol_Blk->blockSize) + (file.start * vol_Blk->blockSize);
+                int adjustedIndex = index + (block * vol_Blk->blockSize);
                 if (entries[adjustedIndex] == data)
                 {
                     printf("File Name: %d, Block Number: %d, Entry Number: %d\n",
-                           file.identifier, (block + file.start), adjustedIndex);
+                           file.identifier, (block + file.start), adjustedIndex + vol_Blk->blockSize * file.start);
                     return;
                 }
             }
@@ -81,7 +83,7 @@ void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
     {
         if (file_dir->ctg_block[index].identifier == identifier)
         {
-            int start = file_dir->ctg_block[index].start;
+            int start = file_dir->ctg_block[index].start - vol_Blk->numDirBlock;
             int length = file_dir->ctg_block[index].length;
 
             // Freeing up free block states
@@ -96,6 +98,11 @@ void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
             file_dir->ctg_block[index].start = 0;
             file_dir->ctg_block[index].length = 0;
             file_dir->ctg_block[index].identifier = 0;
+
+            return;
         }
     }
+    // This is unreachable unless file does not exist
+    printf("File does not exist.");
+    return;
 }

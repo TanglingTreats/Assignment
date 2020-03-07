@@ -254,7 +254,8 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 2)
                     {
-                        printf("Reading block - index\n");
+                        // index
+                        index_read(&file_dir, &vol_Blk, fileIdentifier, entries);
                     }
                     else if (choice == 3)
                     {
@@ -274,7 +275,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 2)
                     {
-                        printf("Deleting block - index\n");
+                        index_delete(&file_dir, &vol_Blk, fileIdentifier, entries);
                     }
                     else if (choice == 3)
                     {

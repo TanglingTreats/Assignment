@@ -88,7 +88,7 @@ void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
 
             // Freeing up free block states
             for (int i = 0; i < length; i++)
-                vol_Blk->freeBlock[index + i] = 0;
+                vol_Blk->freeBlock[(index + vol_Blk->numDirBlock) + i] = 0;
 
             // Writing -1 to disk
             for (int d = 0; d < length * vol_Blk->blockSize; d++)

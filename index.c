@@ -89,7 +89,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
                 {
                     // Prints name, block number, entry number if matches
                     printf("File Name: %d, Block Number: %d, Entry Number: %d\n",
-                           file.identifier, blockIndex, adjustedIndex);
+                           file.identifier, blockIndex, adjustedIndex + vol_Blk->numDirBlock * blockSize);
                     return;
                 }
             }

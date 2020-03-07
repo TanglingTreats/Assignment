@@ -25,25 +25,9 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
     printf("Number of data: %.0f\n", numberOfData);
     
-    int blksNeeded = ceil((numberOfData + ptrsNeeded) / vol_Blk -> blockSize);           
-    
-    printf("Blocks needed without pointers: %i\n", blksNeeded);
+    int blksNeeded = ceil(numberOfData / (vol_Blk -> blockSize - 1));
 
-    ptrsNeeded = blksNeeded;
-
-    blksNeeded = ceil((numberOfData + ptrsNeeded) / vol_Blk -> blockSize);
-
-    // Runs if there are not enough pointers given with number of blocks needed for the allocation
-    while(blksNeeded != ptrsNeeded)
-    {
-        counter++;
-        printf("Cycle %i in block calculation\n", counter);
-
-        ptrsNeeded = blksNeeded;
-
-        blksNeeded = ceil((numberOfData + ptrsNeeded) / vol_Blk -> blockSize);
-
-    }
+    ptrsNeeded = blksNeeded - 1;
 
     printf("Pointers needed: %i\n", ptrsNeeded);
     printf("Blocks needed with pointers: %i\n", blksNeeded);
@@ -62,9 +46,42 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
             if(vol_Blk->freeBlock[pointer] == 0)
             {
                 printf("Block to store at is: %i\n", pointer);
+                blockPointerArr[filled] = pointer;
                 filled++;
             }
         }
+
+        int i;
+        int dataCount = 0;
+        /*
+        for(i = 0; i < blksNeeded; i++)
+        {
+            printf("Pointer is blockPointerArr[%i]: %i\n", i, blockPointerArr[i]);
+            printf("Actual block[%i] vs array index[%i]: Directory index %i\n", blockPointerArr[i], (blockPointerArr[i] - vol_Blk->numDirBlock), block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].index);
+        }
+        */
+
+        // Allocating data into blocks
+        for(i = 0; i < blksNeeded; i++)
+        {
+            int start = block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].start;
+            int end = block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].end;
+            printf("Start: %i \t End: %i\n", start, end);
+            for(; start < end; start++)
+            {
+                if(dataCount < numberOfData)
+                {
+                    entries[start] = data[dataCount];
+                }
+                dataCount++;
+            }
+            if(i < blksNeeded-1)
+            {
+                entries[end] = blockPointerArr[i+1];
+            }
+            vol_Blk->freeBlock[blockPointerArr[i]] = 1;
+        }
+
     }
     else
     {

@@ -11,14 +11,17 @@
 #include <math.h>
 #include "fileStructure.h"
 
+// Add file function for linked allocation
 void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                     float numberOfData, int *data,
                     int identifier, int *entries);
 
+// Read function for linked allocation
 int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block_Array,
                      int data, const int *entries);
 
-void linked_delete(File_dir *file_dir, Vcb *vol_Blk,
+// Delete function for linked allocation
+void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
                        int identifier, int *entries);
 
 #endif

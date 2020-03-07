@@ -103,4 +103,7 @@ int nextFreeSpaceIndex(Vcb *vol_Blk);
 // returns -1 if doesn't exist
 int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded);
 
+// Resets everything in the directory and entries to 0
+bool flushFileData(File_dir *file_dir, int *entries);
+
 #endif

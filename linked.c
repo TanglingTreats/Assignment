@@ -102,6 +102,7 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     
 }
 
+
 int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block_Array,
                      int data, const int *entries)
 {
@@ -179,4 +180,94 @@ int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block
         printf("File Name: %d, Block Number: %d, Entry Number: %d\n", data, blockPos, entryPos);
     }
     
+}
+
+
+void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
+                       int identifier, int *entries)
+{
+    // Search file_dir for identifier and take note of index within file_dir array
+    // Go through each block and make them -1 until next entry within block is -1
+    // If there are files after current file index, shift upwards until current + 1 is 0
+
+    int fileIndex = 0;
+
+    while (file_dir->linked_block[fileIndex].identifier != 0)
+    {
+        if(file_dir->linked_block[fileIndex].identifier == identifier)
+            break;
+        fileIndex++;
+    }
+
+    printf("Index of file within file array is: %i\n", fileIndex);
+
+    int startBlock = file_dir->linked_block[fileIndex].start;
+
+    int startEntry = block_Array[startBlock - vol_Blk->numDirBlock].start;
+
+    int i = 0;
+    int blockSize = vol_Blk->blockSize;
+    
+    while(i < blockSize)
+    {
+        if(entries[startEntry+i] == -1)
+        {
+            // Reset state of last block in file system
+            vol_Blk->freeBlock[startBlock] = 0;
+            break;
+        }
+
+        if(i == blockSize - 1)
+        {
+            
+            vol_Blk->freeBlock[startBlock] = 0;
+
+            startBlock = entries[startEntry + i];
+
+            entries[startEntry + i] = -1;
+
+            startEntry = block_Array[startBlock - vol_Blk->numDirBlock].start;
+            i = -1;
+        }
+        else
+        {
+            // Resetting position
+            //printf("Data at entry before deleting: %i\n", entries[startEntry + i]);
+            entries[startEntry + i] = -1;
+            //printf("Data at entry after deleting: %i\n", entries[startEntry + i]);
+        }
+
+        i++;
+    }
+
+    if(file_dir->linked_block[fileIndex+1].identifier != 0)
+    {
+        // Shift file up the directory
+        int j = fileIndex;
+        do
+        {
+            
+            file_dir->linked_block[j].identifier = file_dir->linked_block[j+1].identifier;
+            file_dir->linked_block[j].start = file_dir->linked_block[j+1].start;
+            file_dir->linked_block[j].end = file_dir->linked_block[j+1].end;
+
+            j++;
+        }
+        while(file_dir->linked_block[j].identifier != 0);
+
+    }
+    else
+    {
+        file_dir->linked_block[fileIndex].identifier = 0;
+        file_dir->linked_block[fileIndex].start = 0;
+        file_dir->linked_block[fileIndex].end = 0;
+    }
+
+    //Check file directory
+    // int j = 0;
+    // while (file_dir->linked_block[j].identifier != 0)
+    // {
+    //     printf("Index %i\nIdentifier: %i\tStart: %i\tEnd: %i\n", j, file_dir->linked_block[j].identifier, file_dir->linked_block[j].start, file_dir->linked_block[j].end);
+    //     j++;
+    // }
 }

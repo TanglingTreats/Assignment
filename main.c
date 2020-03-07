@@ -285,6 +285,8 @@ int main(int argc, char **argv)
             // Print Output
             printdisk(&vol_Blk, entries);
 
+            
+
             // Reset choice
             choice = -1;
             fseek(fp, 0, SEEK_SET);

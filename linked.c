@@ -201,9 +201,9 @@ void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
 
     printf("Index of file within file array is: %i\n", fileIndex);
 
-    int startBlock = file_dir->linked_block[fileIndex].start - vol_Blk->numDirBlock;
+    int startBlock = file_dir->linked_block[fileIndex].start;
 
-    int startEntry = block_Array[startBlock].start;
+    int startEntry = block_Array[startBlock - vol_Blk->numDirBlock].start;
 
     int i = 0;
     int blockSize = vol_Blk->blockSize;
@@ -212,16 +212,21 @@ void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
     {
         if(entries[startEntry+i] == -1)
         {
+            // Reset state of last block in file system
+            vol_Blk->freeBlock[startBlock] = 0;
             break;
         }
 
         if(i == blockSize - 1)
         {
-            int pointer = entries[startEntry + i];
+            
+            vol_Blk->freeBlock[startBlock] = 0;
+
+            startBlock = entries[startEntry + i];
 
             entries[startEntry + i] = -1;
 
-            startEntry = block_Array[pointer - vol_Blk->numDirBlock].start;
+            startEntry = block_Array[startBlock - vol_Blk->numDirBlock].start;
             i = -1;
         }
         else

@@ -270,7 +270,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 1)
                     {
-                        printf("Deleting block - linked\n");
+                        linked_delete(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
                     }
                     else if (choice == 2)
                     {

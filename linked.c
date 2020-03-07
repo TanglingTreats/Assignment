@@ -29,8 +29,8 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
     ptrsNeeded = blksNeeded - 1;
 
-    printf("Pointers needed: %i\n", ptrsNeeded);
-    printf("Blocks needed with pointers: %i\n", blksNeeded);
+    // printf("Pointers needed: %i\n", ptrsNeeded);
+    // printf("Blocks needed with pointers: %i\n", blksNeeded);
 
     if(blksNeeded <= checkFreeSpace(vol_Blk))
     {
@@ -45,7 +45,7 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
             if(vol_Blk->freeBlock[pointer] == 0)
             {
-                printf("Block to store at is: %i\n", pointer);
+                //printf("Block to store at is: %i\n", pointer);
                 blockPointerArr[filled] = pointer;
                 filled++;
             }
@@ -66,7 +66,9 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
         {
             int start = block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].start;
             int end = block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].end;
-            printf("Start: %i \t End: %i\n", start, end);
+
+            //printf("Start: %i \t End: %i\n", start, end);
+
             for(; start < end; start++)
             {
                 if(dataCount < numberOfData)

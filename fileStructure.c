@@ -188,3 +188,45 @@ int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded)
 
     return -1;
 }
+
+bool flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries)
+{
+    int numOfDir = vol_Blk->numDirBlock * vol_Blk->blockSize;
+
+    int i;
+
+    for(i = 0; i < numOfDir; i++)
+    {
+        file_dir->ctg_block[i].identifier = 0;
+        file_dir->ctg_block[i].start = 0;
+        file_dir->ctg_block[i].length = 0;
+
+        file_dir->linked_block[i].identifier = 0;
+        file_dir->linked_block[i].start = 0;
+        file_dir->linked_block[i].end = 0;
+
+        file_dir->indexed_block[i].identifier = 0;
+        file_dir->indexed_block[i].pos = 0;
+    }
+
+    for(i = 0; i < vol_Blk->numData * vol_Blk->blockSize; i++)
+    {
+        entries[i] = -1;
+    }
+
+    for(i = vol_Blk->numDirBlock; i < vol_Blk->numTotal; i++)
+    {
+        //printf("Value of freeblock before reset: %i\n", vol_Blk->freeBlock[i]);
+        vol_Blk->freeBlock[i] = 0;
+        //printf("Value of freeblock after reset: %i\n", vol_Blk->freeBlock[i]);
+    }
+
+    // for(i = 0; i < vol_Blk->numTotal; i++)
+    // {
+    //     printf("Vol space tracker %i\n", vol_Blk->freeBlock[i]);
+    // }
+
+    checkFreeSpace(vol_Blk);
+    printf("\nFree space is now %i\n",vol_Blk->numFreeData );
+
+}

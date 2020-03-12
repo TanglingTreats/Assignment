@@ -64,8 +64,9 @@ bool allocateBlock(Block **data, Vcb *vol_Blk, File_dir *dir)
         dir->ctg_block = (Ctg_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(Ctg_file_dir));
         dir->linked_block = (Linked_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(Linked_file_dir));
         dir->indexed_block = (Indexed_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(Indexed_file_dir));
+        dir->blackOps_block = (BlackOps_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(BlackOps_file_dir));
 
-        if (dir->ctg_block == NULL || dir->linked_block == NULL || dir->indexed_block == NULL)
+        if (dir->ctg_block == NULL || dir->linked_block == NULL || dir->indexed_block == NULL || dir->blackOps_block == NULL)
         {
             printAllocateError("file directory");
             return false;

@@ -150,6 +150,7 @@ int main(int argc, char **argv)
             printf("contiguous %d\n", file_dir.ctg_block[i].identifier);
             printf("linked %d\n", file_dir.linked_block[i].identifier);
             printf("index %d\n", file_dir.indexed_block[i].identifier);
+            printf("Black Ops %d\n", file_dir.blackOps_block[i].identifier);
         }
 
         printf("Number of free blocks: %i\n", vol_Blk.numFreeData);

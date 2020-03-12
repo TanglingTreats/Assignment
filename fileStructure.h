@@ -39,6 +39,11 @@ typedef struct indexed_file_dir
     int identifier, pos;
 } Indexed_file_dir;
 
+typedef struct blackOps_file_dir
+{
+    int identifier, pos;
+} BlackOps_file_dir;
+
 // Unique file structure here
 
 //Contains struct depending on allocation method
@@ -47,6 +52,7 @@ typedef struct file_dir
     Ctg_file_dir *ctg_block;
     Linked_file_dir *linked_block;
     Indexed_file_dir *indexed_block;
+    BlackOps_file_dir *blackOps_block;
 } File_dir;
 
 // Volume control block: Stores total number of blocks, number of free blocks, block size and a pointer to the linked list of free blocks.

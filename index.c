@@ -1,3 +1,10 @@
+/*
+ Program: index.c. Contains index
+ Created on: 6 Mar 2020
+ Edited on: 6 Mar 2020
+ Created by: KAI
+*/
+
 #include "index.h"
 
 void index_add(File_dir *file_dir, Vcb *vol_Blk,

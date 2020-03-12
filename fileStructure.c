@@ -213,7 +213,7 @@ bool flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries)
 
     int i;
 
-    for(i = 0; i < numOfDir; i++)
+    for (i = 0; i < numOfDir; i++)
     {
         file_dir->ctg_block[i].identifier = 0;
         file_dir->ctg_block[i].start = 0;
@@ -227,12 +227,12 @@ bool flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries)
         file_dir->indexed_block[i].pos = 0;
     }
 
-    for(i = 0; i < vol_Blk->numData * vol_Blk->blockSize; i++)
+    for (i = 0; i < vol_Blk->numData * vol_Blk->blockSize; i++)
     {
         entries[i] = -1;
     }
 
-    for(i = vol_Blk->numDirBlock; i < vol_Blk->numTotal; i++)
+    for (i = vol_Blk->numDirBlock; i < vol_Blk->numTotal; i++)
     {
         //printf("Value of freeblock before reset: %i\n", vol_Blk->freeBlock[i]);
         vol_Blk->freeBlock[i] = 0;
@@ -245,6 +245,5 @@ bool flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries)
     // }
 
     checkFreeSpace(vol_Blk);
-    //printf("\nFree space is now %i\n",vol_Blk->numFreeData );
-
+    // printf("\nFree space is now %i\n",vol_Blk->numFreeData );
 }

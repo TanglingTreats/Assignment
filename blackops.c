@@ -75,14 +75,14 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
             int j = 0;
             for(j = 0; j < blockSize; j++)
             {
-                if(!data[entryCounter])
+                //Fill up entry
+                entries[startEntryIndex + j] = data[entryCounter];
+                entryCounter++;
+                if(!data[entryCounter + 1])
                 {
                     hasAllocated = true;
                     break;
                 }
-                //Fill up entry
-                entries[startEntryIndex + j] = data[entryCounter];
-                entryCounter++;
             }
             if(hasAllocated)
             {

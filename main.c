@@ -290,7 +290,24 @@ int main(int argc, char **argv)
                 }
             }
             // Print Output
-            printdisk(&vol_Blk, entries);
+            printdisk(&vol_Blk, &file_dir, entries, choice);
+
+            if(choice == 0)
+            {
+                printf("0 - Contiguous Allocation\n");
+            }
+            else if(choice == 1)
+            {
+                printf("1 - Linked Allocation\n");
+            }
+            else if(choice == 2)
+            {
+                printf("2 - Indexed Allocation\n");
+            }
+            else if(choice == 3)
+            {
+                printf("3 - Unique Allocation\n");
+            }
 
             flushFileData(&file_dir, &vol_Blk, entries);
 
@@ -342,5 +359,5 @@ void freePointers(int *entries, Block *block_Array, File_dir *file_dir, FILE *fi
     free(entries);
 
     printf("Free file pointer\n");
-    free(file);
+    fclose(file);
 }

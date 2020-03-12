@@ -163,6 +163,7 @@ int main(int argc, char **argv)
     }
 
     fp = fopen("CSC1007-SampleCSV.csv", "r");
+    //fp = fopen("test_file.csv", "r");
     if (fp != NULL)
     {
         printf("\nFile open successful!\n");

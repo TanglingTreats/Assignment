@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
 #include "fileStructure.h"
 
 void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,

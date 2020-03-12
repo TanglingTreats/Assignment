@@ -11,60 +11,90 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                int numOfBlocksNeeded, int numberOfData, int *data,
                int identifier, int *entries)
 {
+    printf("Adding File: %d\n", identifier);
+    
     int numOfDirBlks = 0;
-    printf("Number of blocks needed: %i\n", numOfBlocksNeeded);
+    //printf("Number of blocks needed: %i\n", numOfBlocksNeeded);
     
     if(numOfBlocksNeeded > vol_Blk->blockSize)
     {
         numOfDirBlks = ceil((float)numOfBlocksNeeded / (vol_Blk->blockSize - 1));
-
     }
     else
     {
         numOfDirBlks = 1;
     }
 
-    printf("Number of directory blocks needed is: %i\n", numOfDirBlks);
+    //printf("Number of directory blocks needed is: %i\n", numOfDirBlks);
 
     if((numOfDirBlks + numOfBlocksNeeded) <= checkFreeSpace(vol_Blk))
     {
-        int indexBlk = 0;
+        bool hasAllocated = false;
 
-        int i;
-        int count = 0;
-        for(i = 0; i < numOfDirBlks; i++)
+        int dirIndex = dirUpdator(file_dir, vol_Blk, 'b', identifier);
+
+        int numBlksCount = numOfBlocksNeeded;
+        int blockSize = vol_Blk->blockSize;
+
+        int entryCounter = 0;
+
+
+        int dirBlkIndex = nextFreeSpaceIndex(vol_Blk);
+        vol_Blk->freeBlock[dirBlkIndex] = 1;
+        file_dir->blackOps_block[dirIndex].start = dirBlkIndex; 
+
+        // printf("Index of first indexed block: %i\n", dirBlkIndex);
+        // printf("numBlksCount: %i\n", numBlksCount);
+
+        int dirBlkEntry = block_Array[dirBlkIndex - vol_Blk->numDirBlock].start;
+        int i = 0;
+        for(i = 0; i < blockSize; i++)
         {
-            indexBlk = nextFreeSpaceIndex(vol_Blk);
-            vol_Blk->freeBlock[indexBlk] = 1;
-
-            printf("Index block: %i\n", indexBlk);
-
-            int j;
-            int startEntry = block_Array[indexBlk-vol_Blk->numDirBlock].start;
-            int blockSize = vol_Blk->blockSize;
-            for(j = 0; j < numOfBlocksNeeded; j++)
+            if(i == blockSize - 1 && numBlksCount - 1 > 0)
             {
-                int assignBlock = nextFreeSpaceIndex(vol_Blk);
-                entries[startEntry + j] = assignBlock;
-                vol_Blk->freeBlock[assignBlock] = 1;
+                // printf("i: %i \t numBlksCountr: %i\n", i, numBlksCount);
+                // printf("If require more index blocks\n");
+                // Get a new index block
+                dirBlkIndex = nextFreeSpaceIndex(vol_Blk);
+                vol_Blk->freeBlock[dirBlkIndex] = 1;
+                entries[dirBlkEntry + i] = dirBlkIndex;
 
-                printf("Data block: %i\n", assignBlock);
-
-                int k;
-                int dataStart = block_Array[assignBlock - vol_Blk->numDirBlock].start;
-                for(k = 0; k < blockSize; k++)
-                {
-                    if(!data[count])
-                    {
-                        break;
-                    }
-                    printf("Entry index: %i\n", dataStart+k);
-                    printf("Entry: %i\n", data[count]);
-                    count++;
-                }
-
+                dirBlkEntry = block_Array[dirBlkIndex - vol_Blk->numDirBlock].start;
+                i = 0;
             }
+
+            // Get index of dataBlk
+            int dataBlk = nextFreeSpaceIndex(vol_Blk);
+            vol_Blk->freeBlock[dataBlk] = 1;
+
+            // Add index of data block to index block
+            entries[dirBlkEntry + i] = dataBlk;
+
+            int startEntryIndex = block_Array[dataBlk - vol_Blk->numDirBlock].start;
+
+            int j = 0;
+            for(j = 0; j < blockSize; j++)
+            {
+                if(!data[entryCounter])
+                {
+                    hasAllocated = true;
+                    break;
+                }
+                //Fill up entry
+                entries[startEntryIndex + j] = data[entryCounter];
+                entryCounter++;
+            }
+            if(hasAllocated)
+            {
+                break;
+            }
+            numBlksCount--;
+
         }
+
+        file_dir->blackOps_block[dirIndex].end = dirBlkIndex; 
+        
+        //printf("Start blk: %i\t End blk: %i\n", file_dir->blackOps_block[dirIndex].start, file_dir->blackOps_block[dirIndex].end);
     }
     else 
     {

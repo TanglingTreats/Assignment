@@ -290,7 +290,7 @@ int main(int argc, char **argv)
                 }
             }
             // Print Output
-            //printdisk(&vol_Blk, entries);
+            printdisk(&vol_Blk, entries);
 
             flushFileData(&file_dir, &vol_Blk, entries);
 

@@ -143,6 +143,23 @@ int dirUpdator(File_dir *file_dir, Vcb *vol_Blk, char option, int identifier)
                 }
             }
     }
+
+    // linked
+    if (option == 'b')
+    {
+        // identifier == -1 means deleting file,
+        // != -1 means adding file
+        if (identifier != -1)
+            for (int i = 0; i < vol_Blk->numDirBlock * vol_Blk->blockSize; i++)
+            {
+                if (file_dir->blackOps_block[i].identifier == 0)
+                {
+                    file_dir->blackOps_block[i].identifier = identifier;
+                    // return file
+                    return i;
+                }
+            }
+    }
 }
 
 // Checks amount of free space in the file system.

@@ -41,7 +41,7 @@ typedef struct indexed_file_dir
 
 typedef struct blackOps_file_dir
 {
-    int identifier, pos;
+    int identifier, start, end;
 } BlackOps_file_dir;
 
 // Unique file structure here

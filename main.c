@@ -22,6 +22,7 @@
 #include "contiguous.h"
 #include "index.h"
 #include "linked.h"
+#include "blackops.h"
 #include "output.h"
 
 #define DEBUG 0
@@ -163,6 +164,7 @@ int main(int argc, char **argv)
         return 2;
     }
 
+    // --------------- FILE READ SECTION --------------
     fp = fopen("CSC1007-SampleCSV.csv", "r");
     //fp = fopen("test_file.csv", "r");
     if (fp != NULL)
@@ -226,20 +228,23 @@ int main(int argc, char **argv)
                     {
                         // contiguous
                         contiguous_add(&file_dir, &vol_Blk, numOfBlocksNeeded, fileDataSize - 1,
-                                       fileData, fileIdentifier, entries);
+                                    fileData, fileIdentifier, entries);
                     }
                     else if (choice == 1)
                     {
-                        linked_add(&file_dir, &vol_Blk, block_Array, fileDataSize - 1, fileData, fileIdentifier, entries);
+                        linked_add(&file_dir, &vol_Blk, block_Array, fileDataSize - 1, 
+                                    fileData, fileIdentifier, entries);
                     }
                     else if (choice == 2)
                     {
                         // indexed
                         index_add(&file_dir, &vol_Blk, numOfBlocksNeeded, fileDataSize - 1,
-                                  fileData, fileIdentifier, entries);
+                                    fileData, fileIdentifier, entries);
                     }
                     else if (choice == 3)
                     {
+                        blackOps_add(&file_dir, &vol_Blk, block_Array, numOfBlocksNeeded, fileDataSize - 1, 
+                                    fileData, fileIdentifier, entries);
                     }
                 }
                 // If reading, fileInfo has only 1 element inside
@@ -285,7 +290,7 @@ int main(int argc, char **argv)
                 }
             }
             // Print Output
-            printdisk(&vol_Blk, entries);
+            //printdisk(&vol_Blk, entries);
 
             flushFileData(&file_dir, &vol_Blk, entries);
 

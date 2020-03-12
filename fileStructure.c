@@ -228,6 +228,6 @@ bool flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries)
     // }
 
     checkFreeSpace(vol_Blk);
-    printf("\nFree space is now %i\n",vol_Blk->numFreeData );
+    //printf("\nFree space is now %i\n",vol_Blk->numFreeData );
 
 }

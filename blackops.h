@@ -9,10 +9,11 @@
 #define BLACKOPS_H
 
 #include <stdio.h>
+#include <math.h>
 #include "fileStructure.h"
 
-void blackOps_add(File_dir *file_dir, Vcb *vol_Blk,
-               int numberOfBlocksNeeded, int numberOfData, int *data,
+void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
+               int numOfBlocksNeeded, int numberOfData, int *data,
                int identifier, int *entries);
 
 void blackOps_read(File_dir *file_dir, Vcb *vol_Blk,

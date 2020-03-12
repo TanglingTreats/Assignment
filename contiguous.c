@@ -15,7 +15,6 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
     if (checkFreeSpace(vol_Blk) >= numberOfBlocksNeeded)
     {
         int index = freeSpaceIndex_contiguous(vol_Blk, numberOfBlocksNeeded);
-        printf("free Index: %d\n", index);
         if (index > -1)
         {
             // Placing data into the entries, adjusted for index position
@@ -79,6 +78,7 @@ void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
 void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
                        int identifier, int *entries)
 {
+    printf("Deleting file: %d\n", identifier);
     for (int index = 0; index < vol_Blk->numDirBlock * vol_Blk->blockSize; index++)
     {
         if (file_dir->ctg_block[index].identifier == identifier)

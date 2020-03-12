@@ -1,3 +1,10 @@
+/*
+ Program: index.c. Contains index
+ Created on: 6 Mar 2020
+ Edited on: 6 Mar 2020
+ Created by: KAI
+*/
+
 #ifndef INDEX_H
 #define INDEX_H
 

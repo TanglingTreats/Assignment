@@ -8,13 +8,6 @@
 
 #include "fileStructure.h"
 
-int verticalHeight;
-
-char buffer[134][78];
-
-void blocknumber(int x, int y, int counter);
-void indexnumber(int x, int y, int counter);
-void calculateVerticalHeight(int size, int bplusNameHeight);
-void printdisk(Vcb *vol_Blk, int *entries);
+void printdisk(Vcb *vol_Blk, File_dir *file_dir, int *entries, int choice);
 
 #endif

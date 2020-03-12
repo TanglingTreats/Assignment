@@ -161,8 +161,9 @@ int main(int argc, char **argv)
 
         return 2;
     }
+    fp = fopen("test_file.csv", "r");
 
-    fp = fopen("CSC1007-SampleCSV.csv", "r");
+    // fp = fopen("CSC1007-SampleCSV.csv", "r");
     if (fp != NULL)
     {
         printf("\nFile open successful!\n");
@@ -283,7 +284,7 @@ int main(int argc, char **argv)
                 }
             }
             // Print Output
-            printdisk(&vol_Blk, entries);
+            printdisk(&vol_Blk, &file_dir, entries, choice);
 
             flushFileData(&file_dir, &vol_Blk, entries);
 
@@ -335,5 +336,5 @@ void freePointers(int *entries, Block *block_Array, File_dir *file_dir, FILE *fi
     free(entries);
 
     printf("Free file pointer\n");
-    free(file);
+    fclose(file);
 }

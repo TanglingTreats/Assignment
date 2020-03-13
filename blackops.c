@@ -77,12 +77,13 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
             {
                 //Fill up entry
                 entries[startEntryIndex + j] = data[entryCounter];
-                if(!data[entryCounter + 1])
+                printf("Data in entries: %i\n", data[entryCounter]);
+                entryCounter++;
+                if(entryCounter == numberOfData)
                 {
                     hasAllocated = true;
                     break;
                 }
-                entryCounter++;
             }
             if(hasAllocated)
             {
@@ -126,12 +127,12 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
             int blockPointer = startBlock;
 
             int indexEntry = block_Array[blockPointer - vol_Blk->numDirBlock].start;
-            printf("Index entry: %i\n", indexEntry);
+            //printf("Index entry: %i\n", indexEntry);
             // Loops through index blocks
             int j = 0;
             for(j = 0; j < blockSize; j++)
             {
-                printf("entries: %i\n", entries[indexEntry + j]);
+                //printf("entries: %i\n", entries[indexEntry + j]);
                 if(entries[indexEntry + j] == -1)
                 {
                     break;
@@ -139,21 +140,19 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                 if(j == blockSize - 1 && blockPointer != endBlock)
                 {
                     blockPointer = entries[indexEntry + j];
-                    printf("block pointer: %i\n", blockPointer);
+                    //printf("block pointer: %i\n", blockPointer);
                     indexEntry = block_Array[blockPointer - vol_Blk->numDirBlock].start;
-                    printf("Index entry: %i\n", indexEntry);
+                    //printf("Index entry: %i\n", indexEntry);
 
                     j = 0;
                 }
                 int startEntry = block_Array[entries[indexEntry + j] - vol_Blk->numDirBlock].start;
-                printf("start entry: %i\n", startEntry);
+                //printf("start entry: %i\n", startEntry);
                 
                 //Loops through data blocks
                 int k = 0;
                 for(k = 0; k < blockSize; k++)
                 {
-                    //printf("Start entry %i\n", startEntry);
-                    printf("Start entry data: %i\n", entries[startEntry + k]);
                     if(entries[startEntry + k] == data)
                     {
                         entryPos = startEntry + k + (vol_Blk->blockSize * vol_Blk->numDirBlock);
@@ -185,7 +184,6 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
             int j = 0;
             int indexEntry = block_Array[blockPos - vol_Blk->numDirBlock].start;
-            printf("start entry %i\n", indexEntry);
             for(j = 0; j < blockSize; j++)
             {
                 int startEntry = block_Array[entries[indexEntry + j] - vol_Blk->numDirBlock].start;

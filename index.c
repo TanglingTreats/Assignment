@@ -68,7 +68,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
 
         if (fileIdentifier == -1)
         {
-            printf("File does not exist.");
+            printf("File does not exist.\n");
             return;
         }
 
@@ -82,7 +82,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
 
             if (blockIndex == -1)
             {
-                printf("File does not exist.");
+                printf("File does not exist.\n");
                 return;
             }
 
@@ -103,7 +103,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
         }
     }
     // This is unreachable unless file does not exist
-    printf("File does not exist.");
+    printf("File does not exist.\n");
     return;
 }
 
@@ -122,9 +122,9 @@ void index_delete(File_dir *file_dir, Vcb *vol_Blk,
 
         int fileIdentifier = file.identifier;
 
-        if (fileIdentifier == -1)
+        if (fileIdentifier == 0)
         {
-            printf("File does not exist.");
+            printf("File does not exist.\n");
             return;
         }
 
@@ -163,6 +163,6 @@ void index_delete(File_dir *file_dir, Vcb *vol_Blk,
         }
     }
     // This is unreachable unless file does not exist
-    printf("File does not exist.");
+    printf("File does not exist.\n");
     return;
 }

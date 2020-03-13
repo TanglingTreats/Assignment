@@ -11,10 +11,10 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                int numOfBlocksNeeded, int numberOfData, int *data,
                int identifier, int *entries)
 {
-    printf("Adding File: %d\n", identifier);
+    printf("\nAdding File: %d\n", identifier);
     
     int numOfDirBlks = 0;
-    printf("Number of blocks needed: %i\n", numOfBlocksNeeded);
+    //printf("Number of blocks needed: %i\n", numOfBlocksNeeded);
     
     if(numOfBlocksNeeded > vol_Blk->blockSize)
     {
@@ -77,7 +77,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
             {
                 //Fill up entry
                 entries[startEntryIndex + j] = data[entryCounter];
-                printf("Data in entries: %i\n", data[entryCounter]);
+                //printf("Data in entries: %i\n", data[entryCounter]);
                 entryCounter++;
                 if(entryCounter == numberOfData)
                 {
@@ -107,7 +107,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                 int data, int *entries)
 {
-    printf("Reading file: %d\n", data);
+    printf("\nReading file: %d\n", data);
 
     int blockPos = 0;
     int entryPos = 0;
@@ -121,7 +121,7 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
         int startBlock = file_dir->blackOps_block[i].start;
         int endBlock = file_dir->blackOps_block[i].end;
 
-        printf("Start block: %i\t End block: %i\n", startBlock, endBlock);
+        //printf("Start block: %i\t End block: %i\n", startBlock, endBlock);
         if(startBlock != endBlock)
         {
             int blockPointer = startBlock;
@@ -234,7 +234,7 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     }
     else
     {
-        printf("File Name: %d, Block Number: %d, Entry Number: %d\n", data, blockPos, entryPos);
+        printf("File Name: %d, Block Number: %d, Entry Number: %d\n", file_dir->blackOps_block[i].identifier, blockPos, entryPos);
     }
 }
 

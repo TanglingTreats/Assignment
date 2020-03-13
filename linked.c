@@ -11,7 +11,7 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                 float numberOfData, int *data,
                 int identifier, int *entries)
 {
-    printf("Adding File: %d\n", identifier);
+    printf("\nAdding File: %d\n", identifier);
     // Calculate number of blocks needed for allocation
     // Create an array of size of number of blocks needed
     // Generate a random number from first and last index in block_array
@@ -110,7 +110,7 @@ int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block
     // Loop through file directory one by by
     // For each file, loop through until a file is found and return block and entry index
 
-    printf("Reading file: %d\n", data);
+    printf("\nReading file: %d\n", data);
 
     // Keep track of block count
     int blockPos = 0;
@@ -175,14 +175,14 @@ int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block
     }
     else
     {
-        printf("File Name: %d, Block Number: %d, Entry Number: %d\n", data, blockPos, entryPos);
+        printf("File Name: %d, Block Number: %d, Entry Number: %d\n", file_dir->linked_block[i].identifier, blockPos, entryPos);
     }
 }
 
 void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
                    int identifier, int *entries)
 {
-    printf("Deleting File: %d\n", identifier);
+    printf("\nDeleting File: %d\n", identifier);
     // Search file_dir for identifier and take note of index within file_dir array
     // Go through each block and make them -1 until next entry within block is -1
     // If there are files after current file index, shift upwards until current + 1 is 0

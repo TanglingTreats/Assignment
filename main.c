@@ -139,8 +139,8 @@ int main(int argc, char **argv)
     {
         printf("\nBlock allocation successful!\n");
 
-// Debug block allocation
-#if DEBUG
+        // Debug block allocation
+        #if DEBUG
         int i;
         for (i = 0; i < vol_Blk.numData; i++)
         {
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
         }
 
         printf("Number of free blocks: %i\n", vol_Blk.numFreeData);
-#endif
+        #endif
     }
     else
     {

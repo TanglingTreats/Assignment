@@ -34,11 +34,12 @@ void printdisk(Vcb *vol_Blk, File_dir *file_dir, int *entries, int choice)
             printf("\n\tFile ID: %d", file_dir->indexed_block[i].identifier);
             printf("\tIndex Block:\t%d", file_dir->indexed_block[i].pos);
         }
-        // else if (choice == 3)
-        // {
-        //     printf("\n\tFile ID: %d", file_dir->blackOps_block[i].identifier);
-        //     printf("\Index Block:\t%d", file_dir->blackOps_block[i].pos);
-        // }
+        else if (choice == 3)
+        {
+            printf("\n\tFile ID: %d", file_dir->blackOps_block[i].identifier);
+            printf("\nStart:\t%d", file_dir->blackOps_block[i].start);
+            printf("\nEnd:\t%d", file_dir->blackOps_block[i].end);
+        }
     }
     printf("\n");
 
@@ -72,7 +73,7 @@ void printdisk(Vcb *vol_Blk, File_dir *file_dir, int *entries, int choice)
         else
             printf("%d, ", entries[i]);
     }
-    printf("\n");
+    printf("\n\n");
 }
 
 // print -1 for last entry of block, if it contains data

@@ -289,6 +289,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 3)
                     {
+                        blackOps_delete(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
                     }
                 }
             }

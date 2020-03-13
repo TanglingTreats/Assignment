@@ -104,7 +104,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     
 }
 
-void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
+void blackOps_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block_Array,
                 int data, int *entries)
 {
     printf("\nReading file: %d\n", data);
@@ -118,13 +118,13 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     int i = 0;
     while(file_dir->blackOps_block[i].identifier != 0)
     {
-        int startBlock = file_dir->blackOps_block[i].start;
-        int endBlock = file_dir->blackOps_block[i].end;
+        int startBlk = file_dir->blackOps_block[i].start;
+        int endBlk = file_dir->blackOps_block[i].end;
 
-        //printf("Start block: %i\t End block: %i\n", startBlock, endBlock);
-        if(startBlock != endBlock)
+        //printf("Start block: %i\t End block: %i\n", startBlk, endBlk);
+        if(startBlk != endBlk)
         {
-            int blockPointer = startBlock;
+            int blockPointer = startBlk;
 
             int indexEntry = block_Array[blockPointer - vol_Blk->numDirBlock].start;
             //printf("Index entry: %i\n", indexEntry);
@@ -137,7 +137,7 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                 {
                     break;
                 }
-                if(j == blockSize - 1 && blockPointer != endBlock)
+                if(j == blockSize - 1 && blockPointer != endBlk)
                 {
                     blockPointer = entries[indexEntry + j];
                     //printf("block pointer: %i\n", blockPointer);
@@ -157,7 +157,7 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                     {
                         entryPos = startEntry + k + (vol_Blk->blockSize * vol_Blk->numDirBlock);
                         blockPos = entries[indexEntry + j];
-                        printf("Entry position where data is found: %i\n", entryPos);
+                        //printf("Entry position where data is found: %i\n", entryPos);
                         hasFound = true;
                         break;
                     }
@@ -170,17 +170,12 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                 {
                     break;
                 }
-
-                if(entries[indexEntry + j] == -1)
-                {
-                    break;
-                }
                 
             }
         }
         else
         {
-            blockPos = startBlock;
+            blockPos = startBlk;
 
             int j = 0;
             int indexEntry = block_Array[blockPos - vol_Blk->numDirBlock].start;
@@ -197,7 +192,7 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                     {
                         entryPos = (startEntry + k) + (vol_Blk->blockSize * vol_Blk->numDirBlock);
                         blockPos = entries[indexEntry + j];
-                        printf("Entry position where data is found: %i\n", entryPos);
+                        //printf("Entry position where data is found: %i\n", entryPos);
                         hasFound = true;
                         break;
                     }
@@ -238,8 +233,136 @@ void blackOps_read(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     }
 }
 
-void blackOps_delete(File_dir *file_dir, Vcb *vol_Blk,
+void blackOps_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                   int identifier, int *entries)
 {
+    printf("\nDeleting File: %d\n", identifier);
 
+    int fileIndex = 0;
+    while(file_dir->blackOps_block[fileIndex].identifier != 0)
+    {
+        if(file_dir->blackOps_block[fileIndex].identifier == identifier)
+            break;
+        fileIndex++;
+    }
+
+    if(file_dir->blackOps_block[fileIndex].identifier == 0)
+    {
+        printf("ERROR - File is not within the system!\n");
+    }
+    else
+    {
+        int blockSize = vol_Blk->blockSize;
+
+        int startBlk = file_dir->blackOps_block[fileIndex].start;
+        int endBlk = file_dir->blackOps_block[fileIndex].end;
+
+        int indexBlk = 0;
+
+        if(startBlk != endBlk)
+        {
+            indexBlk = startBlk;
+            int indexEntry = block_Array[indexBlk - vol_Blk->numDirBlock].start;
+
+            // Loops through index block
+            int j = 0;
+            for(j = 0; j < blockSize; j++)
+            {
+                if(entries[indexEntry + j] == -1)
+                {
+                    break;
+                }
+                if(j == blockSize - 1 && indexBlk != endBlk)
+                {
+                    // Reset free block array in volume block
+                    vol_Blk->freeBlock[indexBlk] = 0;
+
+                    indexBlk = entries[indexEntry + j];
+                    // Reset pointer in last entry of index block
+                    entries[indexEntry + j] = -1;
+                    
+                    indexEntry = block_Array[indexBlk - vol_Blk->numDirBlock].start;
+                    //printf("Index entry: %i\n", indexEntry);
+                    j = 0;
+                }
+
+                // Sets the start entry of data block within the index block
+                int startEntry = block_Array[entries[indexEntry + j] - vol_Blk->numDirBlock].start;
+
+                int k = 0;
+                for(k = 0; k < blockSize; k++)
+                {
+                    entries[startEntry + k] = -1;
+                    if(entries[startEntry + k + 1] == -1)
+                    {
+                        break;
+                    }
+                }
+                // Reset free block array in volume block
+                vol_Blk->freeBlock[entries[indexEntry + j]] = 0;
+
+                //Reset index block entries
+                entries[indexEntry + j] = -1;
+            }
+
+        }
+        else
+        {
+            indexBlk = startBlk;
+            int indexEntry = block_Array[indexBlk - vol_Blk->numDirBlock].start;
+
+            // Loops index blocks
+            int j = 0;
+            for(j = 0; j < blockSize; j++)
+            {
+                if(entries[indexEntry + j] == -1)
+                {
+                    break;
+                }
+                int startEntry = block_Array[entries[indexEntry + j] - vol_Blk->numDirBlock].start;
+
+                // Loops data blocks
+                int k = 0;
+                for(k = 0; k < blockSize; k++)
+                {
+                    // Reset data block entries
+                    entries[startEntry + k] = -1;
+                    if(entries[startEntry + k + 1] == -1)
+                    {
+                        break;
+                    }
+                }
+
+                // Reset free block array in volume blocks
+                vol_Blk->freeBlock[entries[indexEntry + j]] = 0;
+
+                //Reset index block entries
+                entries[indexEntry + j] = -1;
+
+            }
+            vol_Blk->freeBlock[indexBlk] = 0;
+        }
+
+        if(file_dir->blackOps_block[fileIndex + 1].identifier != 0)
+        {
+            // Shift file up directory
+            int j = fileIndex;
+            do
+            {
+                file_dir->blackOps_block[j].identifier = file_dir->blackOps_block[j + 1].identifier;
+                file_dir->blackOps_block[j].start = file_dir->blackOps_block[j + 1].start;
+                file_dir->blackOps_block[j].end = file_dir->blackOps_block[j + 1].end;
+
+                j++;
+            } while (file_dir->blackOps_block[j].identifier != 0);
+            
+        }
+        else
+        {
+            file_dir->blackOps_block[fileIndex].identifier = 0;
+            file_dir->blackOps_block[fileIndex].start = 0;
+            file_dir->blackOps_block[fileIndex].end = 0;
+        }
+    }
+    
 }

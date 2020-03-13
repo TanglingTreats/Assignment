@@ -197,7 +197,7 @@ void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
     }
     if (file_dir->linked_block[fileIndex].identifier == 0)
     {
-        printf("ERROR - File is not within system!\n");
+        printf("ERROR - File is not within the system!\n");
     }
     else
     {

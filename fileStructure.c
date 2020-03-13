@@ -225,6 +225,10 @@ bool flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries)
 
         file_dir->indexed_block[i].identifier = 0;
         file_dir->indexed_block[i].pos = 0;
+
+        file_dir->blackOps_block[i].identifier = 0;
+        file_dir->blackOps_block[i].start = 0;
+        file_dir->blackOps_block[i].end = 0;
     }
 
     for (i = 0; i < vol_Blk->numData * vol_Blk->blockSize; i++)

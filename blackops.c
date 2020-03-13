@@ -303,6 +303,9 @@ void blackOps_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
                 //Reset index block entries
                 entries[indexEntry + j] = -1;
+
+                // Reset last index block
+                vol_Blk->freeBlock[indexBlk] = 0;
             }
 
         }
@@ -326,6 +329,7 @@ void blackOps_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                 for(k = 0; k < blockSize; k++)
                 {
                     // Reset data block entries
+                    
                     entries[startEntry + k] = -1;
                     if(entries[startEntry + k + 1] == -1)
                     {
@@ -333,7 +337,6 @@ void blackOps_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                     }
                 }
 
-                // Reset free block array in volume blocks
                 vol_Blk->freeBlock[entries[indexEntry + j]] = 0;
 
                 //Reset index block entries
@@ -364,5 +367,4 @@ void blackOps_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
             file_dir->blackOps_block[fileIndex].end = 0;
         }
     }
-    
 }

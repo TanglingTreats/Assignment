@@ -213,7 +213,7 @@ int main(int argc, char **argv)
             int numOfBlocksNeeded = 0;
             while (readFile(fp, comm, &fileInfo, &fileDataSize))
             {
-                printf("\nThe command is: %s\n", comm);
+                // printf("\nThe command is: %s\n", comm);
                 fileIdentifier = fileInfo[0];
 
                 //Loop through as long as there is a line to read

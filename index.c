@@ -11,7 +11,7 @@ void index_add(File_dir *file_dir, Vcb *vol_Blk,
                int numberOfBlocksNeeded, int numberOfData, int *data,
                int identifier, int *entries)
 {
-    printf("Adding File: %d\n", identifier);
+    printf("\nAdding File: %d", identifier);
     // Size of blocks
     int blockSize = vol_Blk->blockSize;
     if (numberOfBlocksNeeded > vol_Blk->blockSize ||
@@ -55,7 +55,7 @@ void index_add(File_dir *file_dir, Vcb *vol_Blk,
 void index_read(File_dir *file_dir, Vcb *vol_Blk,
                 int data, int *entries)
 {
-    printf("Reading file: %d\n", data);
+    printf("\nReading file: %d", data);
     // Get blocksize, easier to work with afterwards
     int blockSize = vol_Blk->blockSize;
 
@@ -66,9 +66,9 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
 
         int fileIdentifier = file.identifier;
 
-        if (fileIdentifier == -1)
+        if (fileIdentifier == 0)
         {
-            printf("File does not exist.\n");
+            printf("\nFile does not exist.");
             return;
         }
 
@@ -82,8 +82,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
 
             if (blockIndex == -1)
             {
-                printf("File does not exist.\n");
-                return;
+                break;
             }
 
             // Go into the blocks that indexBlock is pointing to
@@ -91,11 +90,12 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
             {
                 int adjustedIndex = blockSize * (blockIndex - vol_Blk->numDirBlock) + entriesIndex;
 
+                // printf("\nadjustedIndex: %d", adjustedIndex);
                 // Find the data that matches
                 if (entries[adjustedIndex] == data)
                 {
                     // Prints name, block number, entry number if matches
-                    printf("File Name: %d, Block Number: %d, Entry Number: %d\n",
+                    printf("\nFile Name: %d, Block Number: %d, Entry Number: %d",
                            file.identifier, blockIndex, adjustedIndex + vol_Blk->numDirBlock * blockSize);
                     return;
                 }
@@ -103,7 +103,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
         }
     }
     // This is unreachable unless file does not exist
-    printf("File does not exist.\n");
+    printf("\nFile does not exist.");
     return;
 }
 
@@ -111,7 +111,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
 void index_delete(File_dir *file_dir, Vcb *vol_Blk,
                   int identifier, int *entries)
 {
-    printf("Deleting file: %d\n", identifier);
+    printf("\nDeleting file: %d", identifier);
     // Get blocksize, easier to work with afterwards
     int blockSize = vol_Blk->blockSize;
 
@@ -124,7 +124,7 @@ void index_delete(File_dir *file_dir, Vcb *vol_Blk,
 
         if (fileIdentifier == 0)
         {
-            printf("File does not exist.\n");
+            printf("\nFile does not exist.");
             return;
         }
 
@@ -163,6 +163,6 @@ void index_delete(File_dir *file_dir, Vcb *vol_Blk,
         }
     }
     // This is unreachable unless file does not exist
-    printf("File does not exist.\n");
+    printf("\nFile does not exist.");
     return;
 }

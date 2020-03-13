@@ -194,7 +194,7 @@ int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded)
             bool pass = true;
             for (int bN = 1; bN < blocksNeeded; bN++)
             {
-                if (vol_Blk->freeBlock[bN] == 1)
+                if (vol_Blk->freeBlock[bN + i] == 1)
                     pass = false;
             }
             if (pass == true)

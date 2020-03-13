@@ -12,7 +12,7 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
                     int numberOfBlocksNeeded, int numberOfData, int *data,
                     int identifier, int *entries)
 {
-    printf("Adding File: %d\n", identifier);
+    printf("\nAdding File: %d", identifier);
     if (checkFreeSpace(vol_Blk) >= numberOfBlocksNeeded)
     {
         int index = freeSpaceIndex_contiguous(vol_Blk, numberOfBlocksNeeded);
@@ -44,7 +44,7 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
 void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
                      int data, int *entries)
 {
-    printf("Reading file: %d\n", data);
+    printf("\nReading file: %d", data);
     int block, entryNumber, name;
     // Print name, block number, entry number
 
@@ -63,7 +63,7 @@ void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
                 int adjustedIndex = index + (block * vol_Blk->blockSize);
                 if (entries[adjustedIndex] == data)
                 {
-                    printf("File Name: %d, Block Number: %d, Entry Number: %d\n",
+                    printf("\nFile Name: %d, Block Number: %d, Entry Number: %d",
                            file.identifier, (block + file.start), adjustedIndex + vol_Blk->blockSize * file.start);
                     return;
                 }
@@ -72,14 +72,14 @@ void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
         fileNumber += 1;
     }
     // This is unreachable unless file does not exist
-    printf("File does not exist.");
+    printf("\nFile does not exist.");
     return;
 }
 
 void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
                        int identifier, int *entries)
 {
-    printf("Deleting file: %d\n", identifier);
+    printf("\nDeleting file: %d", identifier);
     for (int index = 0; index < vol_Blk->numDirBlock * vol_Blk->blockSize; index++)
     {
         if (file_dir->ctg_block[index].identifier == identifier)
@@ -104,6 +104,6 @@ void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
         }
     }
     // This is unreachable unless file does not exist
-    printf("File does not exist.");
+    printf("\nFile does not exist.");
     return;
 }

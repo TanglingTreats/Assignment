@@ -144,7 +144,7 @@ int dirUpdator(File_dir *file_dir, Vcb *vol_Blk, char option, int identifier)
             }
     }
 
-    // linked
+    // black ops
     if (option == 'b')
     {
         // identifier == -1 means deleting file,

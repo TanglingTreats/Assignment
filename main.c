@@ -257,6 +257,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 1)
                     {
+                        // linked
                         linked_read(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
                     }
                     else if (choice == 2)
@@ -266,6 +267,8 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 3)
                     {
+                        // black ops
+                        blackOps_read(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
                     }
                 }
                 // If deleting, fileInfo has only 1 element inside

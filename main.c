@@ -29,7 +29,7 @@
 
 // ---- Function Prototype ----
 void printInputError();
-void freePointers(int *entries, Block *block_Array, File_dir *file_dir, FILE *file);
+void freePointers(int *entries,Vcb *vcb, Block *block_Array, File_dir *file_dir, FILE *file);
 
 int main(int argc, char **argv)
 {
@@ -74,13 +74,13 @@ int main(int argc, char **argv)
     printf("Current block size is: %d\n", vol_Blk.blockSize);
     printf("Current number of blocks is: %d\n", vol_Blk.numTotal);
 
-    while (option != 's' && option != 'n')
+    while (option != 's' && option != 'S' && option != 'n' && option != 'N')
     {
         printf("\nWould you like to input block size or number of blocks? s/n: ");
         scanf(" %c", &option);
-        if (option == 's')
+        if (option == 's' || option == 'S')
         {
-            while (blkSize < 2)
+            while (blkSize < 2 || blkSize > 65)
             {
                 printf("\nPlease input your desired block size: ");
                 scanf("%d", &blkSize);
@@ -89,15 +89,19 @@ int main(int argc, char **argv)
                 {
                     printf("\nChosen block size cannot be less than 2\n");
                 }
+                else if (blkSize > 65)
+                {
+                    printf("\nChosen block size cannot be more than 65\n");
+                }
                 else
                 {
                     vol_Blk.blockSize = blkSize;
                 }
             }
         }
-        else if (option == 'n')
+        else if (option == 'n' || option == 'N')
         {
-            while (numOfBlk < 2)
+            while (numOfBlk < 2 || numOfBlk > 65)
             {
                 printf("\nPlease input your desired number of blocks: ");
                 scanf("%d", &numOfBlk);
@@ -106,8 +110,11 @@ int main(int argc, char **argv)
                 {
                     printf("\nChosen number of blocks cannot be less than 2\n");
                 }
-                else
+                else if (numOfBlk > 65)
                 {
+                    printf("\nChosen number of blocks cannot be more than 65\n");
+                }
+                else {
                     vol_Blk.numTotal = numOfBlk;
                 }
             }
@@ -312,7 +319,6 @@ int main(int argc, char **argv)
             {
                 printf("3 - Unique Allocation\n");
             }
-
             flushFileData(&file_dir, &vol_Blk, entries);
 
             // Reset choice
@@ -329,7 +335,7 @@ int main(int argc, char **argv)
         }
     }
 
-    freePointers(entries, block_Array, &file_dir, fp);
+    freePointers(entries, &vol_Blk, block_Array, &file_dir, fp);
 
     printf("\nThank you for using Shrodinger's OS\n");
     printf("\n----------- End of Program ------------\n");
@@ -343,7 +349,7 @@ void printInputError()
     printf("\nInvalid input detected. Please try again.\n");
 }
 
-void freePointers(int *entries, Block *block_Array, File_dir *file_dir, FILE *file)
+void freePointers(int *entries, Vcb *vcb, Block *block_Array, File_dir *file_dir, FILE *file)
 {
     printf("\nFree contiguous\n");
     free(file_dir->ctg_block);
@@ -353,6 +359,12 @@ void freePointers(int *entries, Block *block_Array, File_dir *file_dir, FILE *fi
 
     printf("Free indexed\n");
     free(file_dir->indexed_block);
+
+    printf("Free blackops\n");
+    free(file_dir->blackOps_block);
+
+    printf("Free vcb\n");
+    free(vcb->freeBlock);
 
     //unique file needs to be freed
 

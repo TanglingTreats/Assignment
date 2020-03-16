@@ -12,10 +12,11 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
                     int numberOfBlocksNeeded, int numberOfData, int *data,
                     int identifier, int *entries)
 {
+    int accessCounter = 0;
     printf("\nAdding File: %d", identifier);
-    if (checkFreeSpace(vol_Blk) >= numberOfBlocksNeeded)
+    if (checkFreeSpace(vol_Blk, &accessCounter) >= numberOfBlocksNeeded)
     {
-        int index = freeSpaceIndex_contiguous(vol_Blk, numberOfBlocksNeeded);
+        int index = freeSpaceIndex_contiguous(vol_Blk, numberOfBlocksNeeded, &accessCounter);
         if (index > -1)
         {
             // Placing data into the entries, adjusted for index position
@@ -32,6 +33,7 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
             for (int i = 0; i < numberOfBlocksNeeded; i++)
                 vol_Blk->freeBlock[index + i] = 1;
 
+            printf("\nAccess Count: %d", accessCounter);
             return;
         }
         printf("\nERROR- Not enough contiguous blocks for data.\n");

@@ -55,6 +55,7 @@ typedef struct file_dir
     BlackOps_file_dir *blackOps_block;
 } File_dir;
 
+
 // Volume control block: Stores total number of blocks, number of free blocks, block size and a pointer to the linked list of free blocks.
 typedef struct vcb
 {
@@ -100,14 +101,14 @@ void printAllocateError(char *input);
 int dirUpdator(File_dir *file_dir, Vcb *vol_Blk, char option, int identifier);
 
 // Updates and returns number of free blocks
-int checkFreeSpace(Vcb *vol_Blk);
+int checkFreeSpace(Vcb *vol_Blk, int *accessCounter);
 
 // Returns index of next free block
-int nextFreeSpaceIndex(Vcb *vol_Blk);
+int nextFreeSpaceIndex(Vcb *vol_Blk, int *accessCounter);
 
 // Returns index where x number of contiguous blocks are free for file
 // returns -1 if doesn't exist
-int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded);
+int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded, int *accessCounter);
 
 // Resets everything in the directory and entries to 0
 bool flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries);

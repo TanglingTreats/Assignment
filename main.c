@@ -189,7 +189,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        fp = fopen("kai_test.csv", "r");
+        fp = fopen("CSC1007-SampleCSV.csv", "r");
     }
     if (fp != NULL)
     {

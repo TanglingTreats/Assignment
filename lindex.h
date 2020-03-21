@@ -5,8 +5,8 @@
  Created by: Edwin
 */
 
-#ifndef BLACKOPS_H
-#define BLACKOPS_H
+#ifndef LINDEX_H
+#define LINDEX_H
 
 #include <stdio.h>
 #include <math.h>

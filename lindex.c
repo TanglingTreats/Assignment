@@ -1,11 +1,11 @@
 /*
- Program: blackops.c. Contains function implementations for unique allocation method
+ Program: lindex.c. Contains function implementations for unique allocation method
  Created on: 12 Mar 2020
  Edited on: 21 Mar 2020
  Created by: Edwin
 */
 
-#include "blackops.h"
+#include "lindex.h"
 
 void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                int numOfBlocksNeeded, int numberOfData, int *data,

@@ -19,7 +19,7 @@
 #include "contiguous.h"
 #include "index.h"
 #include "linked.h"
-#include "blackops.h"
+#include "lindex.h"
 #include "output.h"
 
 #define DEBUG 0

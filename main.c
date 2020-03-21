@@ -222,6 +222,7 @@ int main(int argc, char **argv)
 
         if (choice >= 0 && choice < 4)
         {
+            flushFileData(&file_dir, &vol_Blk, entries);
             // Execute allocation methods etc.
             char comm[7];
 
@@ -365,8 +366,6 @@ int main(int argc, char **argv)
             printf("\nSpace Utilisation: %0.2f%%\n", (instructionCount * vol_Blk.numData - dataUtilisation * 1.0) / (instructionCount * vol_Blk.numData) * 100);
             dataUtilisation = 0;
             instructionCount = 0;
-
-            flushFileData(&file_dir, &vol_Blk, entries);
 
             // Reset choice
             choice = -1;

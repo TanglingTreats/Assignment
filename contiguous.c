@@ -25,7 +25,6 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
                     int adjustedIndex = (index - vol_Blk->numDirBlock) * vol_Blk->blockSize + d;
                     entries[adjustedIndex] = data[d];
                 }
-
             int directoryIndex = dirUpdator(file_dir, vol_Blk, 'c', identifier);
 
             // Index + numDirBlock, to adjust for the directory blocks

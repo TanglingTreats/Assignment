@@ -103,7 +103,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
                     // Prints name, block number, entry number if matches
                     printf("\nFile Name: %d, Block Number: %d, Entry Number: %d",
                            file.identifier, blockIndex, adjustedIndex + vol_Blk->numDirBlock * blockSize);
-                    printf("Access Count: %d\n", accessCounter);
+                    printf("\nAccess Count: %d\n", accessCounter);
                     *accessCounts += accessCounter;
                     return;
                 }

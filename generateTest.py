@@ -1,23 +1,26 @@
 import random
 import csv
 
+# cleaning file first
 f = open("kai_test.csv", "w", newline="")
 writer = csv.writer(f)
+f.close()
 
 # choices
-option = "random"
+option = "all"
 methodChoices = ["add", "delete", "read"]
 
 # parameters
-numberOfInstructions = 50
+numberOfInstructions = 100
 possiblefiles = [100, 200, 300, 400, 500, 600, 700, 800, 900]
 currentfiles= []
 
 minimumFileSize = 1
 maximumFileSize = 65
 
-# Testing add function for every file size
-if option == "add1":
+def add1():
+    f = open("kai_test.csv", "a", newline="")
+    writer = csv.writer(f)
     for fileLength in range(minimumFileSize, maximumFileSize):
         row = []
         # assigning instruction to add
@@ -32,9 +35,11 @@ if option == "add1":
         writer.writerow(row)
         # deleting file afterwards
         writer.writerow(["delete", " " + str(filename)])
+    f.close()
 
-# For every file size, testing every other file size
-if option == "add2":
+def add2():
+    f = open("kai_test.csv", "a", newline="")
+    writer = csv.writer(f)
     for fileLength in range(minimumFileSize, maximumFileSize):
         row = []
         # assigning instruction to add
@@ -67,9 +72,12 @@ if option == "add2":
         # deleting file afterwards
         currentfiles.remove(filename)
         writer.writerow(["delete", " " + str(filename)])
+    f.close()
 
-# Test number of files
-if option == "add3":
+def add3():
+    f = open("kai_test.csv", "a", newline="")
+    writer = csv.writer(f)
+    global currentfiles
     for startingfileLength in range(minimumFileSize, maximumFileSize):
         for fileLength in range(startingfileLength, maximumFileSize):
             # checking if there are still files
@@ -93,9 +101,11 @@ if option == "add3":
         for filename in currentfiles:
             writer.writerow(["delete", " " + str(filename)])
             currentfiles = []
+    f.close()
 
-# Testing to read every single entry in a file
-if option == "read1":
+def read1():
+    f = open("kai_test.csv", "a", newline="")
+    writer = csv.writer(f)
     for fileLength in range(minimumFileSize, maximumFileSize):
         row = []
         # assigning instruction to add
@@ -113,9 +123,11 @@ if option == "read1":
             writer.writerow(["read", " " + str(filecontent)])
         # deleting file afterwards
         writer.writerow(["delete", " " + str(filename)])
+    f.close()
 
-# Testing to read every single entry in a file
-if option == "read2":
+def read2():
+    f = open("kai_test.csv", "a", newline="")
+    writer = csv.writer(f)
     for fileLength in range(minimumFileSize, maximumFileSize):
         row = []
         # assigning instruction to add
@@ -136,8 +148,11 @@ if option == "read2":
         # deleting file afterwards
         writer.writerow(["delete", " " + str(filename)])
         currentfiles.remove(filename)
+    f.close()
 
-if option == "delete":
+def delete1():
+    f = open("kai_test.csv", "a", newline="")
+    writer = csv.writer(f)    
     for fileLength in range(minimumFileSize, maximumFileSize):
         row = []
         # assigning instruction to add
@@ -151,15 +166,18 @@ if option == "delete":
         for filecontent in range(filename, filename+fileLength):
             row.append(" " + str(filecontent))
         writer.writerow(row)
-        # reading every entry not in file
+        # deleting every entry not in file
         for fakefilename in list(set(possiblefiles) - set(currentfiles)):
             for filecontent in range(fakefilename, fakefilename+maximumFileSize):
                 writer.writerow(["delete", " " + str(filecontent)])
         # deleting file afterwards
         writer.writerow(["delete", " " + str(filename)])
         currentfiles.remove(filename)
+    f.close()
 
-if option == "random":
+def randomly():
+    f = open("kai_test.csv", "a", newline="")
+    writer = csv.writer(f)
     for x in range(numberOfInstructions):
         row = []
         instruction = methodChoices[random.randint(0,2)]
@@ -222,5 +240,52 @@ if option == "random":
                 file = choices[random.randint(0, len(choices) - 1)] + random.randint(1, 10)
                 row.append(" " + str(file))            
         writer.writerow(row)
+    f.close()
+
+# Testing add function for every file size
+if option == "add1":
+    add1()
+
+# For every file size, testing every other file size
+if option == "add2":
+    add2()    
+
+# Test number of files
+if option == "add3":
+    add3()
+
+# Testing to read every single entry in a file
+if option == "read1":
+    read1()
+
+# Testing to read every single entry in a file
+if option == "read2":
+    read2()
+
+# Testing to delete every entry not in file
+if option == "delete1":
+    delete1()
+
+if option == "random":
+    randomly()
+
+if option == "all":
+    choices = ["add1", "add2", "add3", "read1", "read2", "delete1", "random"]
+
+    for testcase in choices:
+        if testcase == "add1":
+            add1()
+        if testcase == "add2":
+            add2()    
+        if testcase == "add3":
+            add3()
+        if testcase == "read1":
+            read1()
+        if testcase == "read2":
+            read2()
+        if testcase == "delete1":
+            delete1()
+        if testcase == "random":
+            randomly()
 
 f.close()

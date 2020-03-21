@@ -266,7 +266,7 @@ void lindex_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
     if(file_dir->blackOps_block[fileIndex].identifier == 0)
     {
-        printf("\n ERROR - File is not within the system!");
+        printf("ERROR - File is not within the system!");
     }
     else
     {

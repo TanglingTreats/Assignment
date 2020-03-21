@@ -1,7 +1,7 @@
 /*
  Program: blackops.c. Contains function implementations for unique allocation method
  Created on: 12 Mar 2020
- Edited on: 13 Mar 2020
+ Edited on: 21 Mar 2020
  Created by: Edwin
 */
 
@@ -33,7 +33,6 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     else
     {
         int numOfDirBlks = 0;
-        //printf("Number of blocks needed: %i\n", numOfBlocksNeeded);
         
         if(numOfBlocksNeeded > vol_Blk->blockSize)
         {
@@ -43,8 +42,6 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
         {
             numOfDirBlks = 1;
         }
-
-        //printf("Number of directory blocks needed is: %i\n", numOfDirBlks);
 
         if((numOfDirBlks + numOfBlocksNeeded) <= checkFreeSpace(vol_Blk, &accessCounter))
         {
@@ -62,17 +59,12 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
             vol_Blk->freeBlock[dirBlkIndex] = 1;
             file_dir->blackOps_block[dirIndex].start = dirBlkIndex; 
 
-            // printf("Index of first indexed block: %i\n", dirBlkIndex);
-            // printf("numBlksCount: %i\n", numBlksCount);
-
             int dirBlkEntry = block_Array[dirBlkIndex - vol_Blk->numDirBlock].start;
             int i = 0;
             for(i = 0; i < blockSize; i++)
             {
                 if(i == blockSize - 1 && numBlksCount - 1 > 0)
                 {
-                    // printf("i: %i \t numBlksCountr: %i\n", i, numBlksCount);
-                    // printf("If require more index blocks\n");
                     // Get a new index block
                     dirBlkIndex = nextFreeSpaceIndex(vol_Blk, &accessCounter);
                     vol_Blk->freeBlock[dirBlkIndex] = 1;
@@ -114,7 +106,6 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
             file_dir->blackOps_block[dirIndex].end = dirBlkIndex; 
             printf("\nAccess Count: %d\n", accessCounter);
-            //printf("Start blk: %i\t End blk: %i\n", file_dir->blackOps_block[dirIndex].start, file_dir->blackOps_block[dirIndex].end);
         }
         else 
         {
@@ -141,18 +132,17 @@ void blackOps_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bl
         int startBlk = file_dir->blackOps_block[i].start;
         int endBlk = file_dir->blackOps_block[i].end;
 
-        //printf("Start block: %i\t End block: %i\n", startBlk, endBlk);
         if(startBlk != endBlk)
         {
             int blockPointer = startBlk;
 
             int indexEntry = block_Array[blockPointer - vol_Blk->numDirBlock].start;
-            //printf("Index entry: %i\n", indexEntry);
+
             // Loops through index blocks
             int j = 0;
             for(j = 0; j < blockSize; j++)
             {
-                //printf("entries: %i\n", entries[indexEntry + j]);
+                
                 if(entries[indexEntry + j] == -1)
                 {
                     break;
@@ -160,15 +150,14 @@ void blackOps_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bl
                 if(j == blockSize - 1 && blockPointer != endBlk)
                 {
                     blockPointer = entries[indexEntry + j];
-                    //printf("block pointer: %i\n", blockPointer);
+                    
                     indexEntry = block_Array[blockPointer - vol_Blk->numDirBlock].start;
-                    //printf("Index entry: %i\n", indexEntry);
+                    
 
                     j = 0;
                 }
                 int startEntry = block_Array[entries[indexEntry + j] - vol_Blk->numDirBlock].start;
-                //printf("start entry: %i\n", startEntry);
-                
+                                
                 //Loops through data blocks
                 int k = 0;
                 for(k = 0; k < blockSize; k++)
@@ -178,7 +167,7 @@ void blackOps_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bl
                     {
                         entryPos = startEntry + k + (vol_Blk->blockSize * vol_Blk->numDirBlock);
                         blockPos = entries[indexEntry + j];
-                        //printf("Entry position where data is found: %i\n", entryPos);
+                        
                         hasFound = true;
                         break;
                     }
@@ -208,13 +197,12 @@ void blackOps_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bl
                 for(k = 0; k < blockSize; k++)
                 {
                     accessCounter++;
-                    //printf("Start entry %i\n", startEntry);
-                    //printf("Start entry data: %i\n", entries[startEntry + k]);
+                    
                     if(entries[startEntry + k] == data)
                     {
                         entryPos = (startEntry + k) + (vol_Blk->blockSize * vol_Blk->numDirBlock);
                         blockPos = entries[indexEntry + j];
-                        //printf("Entry position where data is found: %i\n", entryPos);
+                        
                         hasFound = true;
                         break;
                     }
@@ -240,7 +228,6 @@ void blackOps_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bl
         {
             break;
         }
-        
 
         i++;
     }
@@ -305,7 +292,7 @@ void blackOps_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                     entries[indexEntry + j] = -1;
                     
                     indexEntry = block_Array[indexBlk - vol_Blk->numDirBlock].start;
-                    //printf("Index entry: %i\n", indexEntry);
+                    
                     j = 0;
                 }
 

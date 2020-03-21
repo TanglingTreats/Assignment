@@ -1,7 +1,7 @@
 /*
  Program: linked.c. Contains function implementations for linked allocation method
  Created on: 6 Mar 2020
- Edited on: 7 Mar 2020
+ Edited on: 21 Mar 2020
  Created by: Edwin
 */
 
@@ -51,9 +51,6 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
         ptrsNeeded = blksNeeded - 1;
 
-        // printf("Pointers needed: %i\n", ptrsNeeded);
-        // printf("Blocks needed with pointers: %i\n", blksNeeded);
-
         if (blksNeeded <= checkFreeSpace(vol_Blk, &accessCounter))
         {
             // Contains list of blocks to store at
@@ -76,21 +73,12 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
             int i = 0;
             int dataCount = 0;
-            /*
-            for(i = 0; i < blksNeeded; i++)
-            {
-                printf("Pointer is blockPointerArr[%i]: %i\n", i, blockPointerArr[i]);
-                printf("Actual block[%i] vs array index[%i]: Directory index %i\n", blockPointerArr[i], (blockPointerArr[i] - vol_Blk->numDirBlock), block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].index);
-            }
-            */
 
             // Allocating data into blocks
             for (i = 0; i < blksNeeded; i++)
             {
                 int start = block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].start;
                 int end = block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].end;
-
-                //printf("Start: %i \t End: %i\n", start, end);
 
                 for (; start < end; start++)
                 {
@@ -110,13 +98,6 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
             file_dir->linked_block[directoryIndex].start = blockPointerArr[0];
             file_dir->linked_block[directoryIndex].end = blockPointerArr[blksNeeded - 1];
-
-            /*
-            printf("File Directory\n Identifier: %i \t Start: %i \t End: %i \n", 
-                file_dir->linked_block[directoryIndex].identifier, 
-                file_dir->linked_block[directoryIndex].start, 
-                file_dir->linked_block[directoryIndex].end);
-            */
         }
         else
         {
@@ -229,7 +210,6 @@ void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
     }
     else
     {
-        //printf("Index of file within file array is: %i\n", fileIndex);
 
         int startBlock = file_dir->linked_block[fileIndex].start;
 
@@ -262,9 +242,7 @@ void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
             else
             {
                 // Resetting position
-                //printf("Data at entry before deleting: %i\n", entries[startEntry + i]);
                 entries[startEntry + i] = -1;
-                //printf("Data at entry after deleting: %i\n", entries[startEntry + i]);
             }
 
             i++;
@@ -290,14 +268,6 @@ void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
             file_dir->linked_block[fileIndex].start = 0;
             file_dir->linked_block[fileIndex].end = 0;
         }
-
-        //Check file directory
-        // int j = 0;
-        // while (file_dir->linked_block[j].identifier != 0)
-        // {
-        //     printf("Index %i\nIdentifier: %i\tStart: %i\tEnd: %i\n", j, file_dir->linked_block[j].identifier, file_dir->linked_block[j].start, file_dir->linked_block[j].end);
-        //     j++;
-        // }
     }
 
 }

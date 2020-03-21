@@ -112,6 +112,6 @@ void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
         }
     }
     // This is unreachable unless file does not exist
-    printf("\nError: File does not exist.\n");
+    printf("\nERROR - File is not within the system!\n");
     return;
 }

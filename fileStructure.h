@@ -39,10 +39,10 @@ typedef struct indexed_file_dir
     int identifier, pos;
 } Indexed_file_dir;
 
-typedef struct blackOps_file_dir
+typedef struct lindex_file_dir
 {
     int identifier, start, end;
-} BlackOps_file_dir;
+} lindex_file_dir;
 
 // Unique file structure here
 
@@ -52,7 +52,7 @@ typedef struct file_dir
     Ctg_file_dir *ctg_block;
     Linked_file_dir *linked_block;
     Indexed_file_dir *indexed_block;
-    BlackOps_file_dir *blackOps_block;
+    lindex_file_dir *blackOps_block;
 } File_dir;
 
 

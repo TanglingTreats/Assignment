@@ -189,7 +189,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        fp = fopen("kai_test.csv", "r");
+        fp = fopen("CSC1007-SampleCSV.csv", "r");
     }
     if (fp != NULL)
     {
@@ -277,7 +277,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 3)
                     {
-                        blackOps_add(&file_dir, &vol_Blk, block_Array, numOfBlocksNeeded, fileDataSize - 1, 
+                        lindex_add(&file_dir, &vol_Blk, block_Array, numOfBlocksNeeded, fileDataSize - 1, 
                                     fileData, fileIdentifier, entries);
                     }
                 }
@@ -302,7 +302,7 @@ int main(int argc, char **argv)
                     else if (choice == 3)
                     {
                         // black ops
-                        blackOps_read(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
+                        lindex_read(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
                     }
                 }
                 // If deleting, fileInfo has only 1 element inside
@@ -323,7 +323,7 @@ int main(int argc, char **argv)
                     }
                     else if (choice == 3)
                     {
-                        blackOps_delete(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
+                        lindex_delete(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
                     }
                 }
             }

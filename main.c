@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 
     // --------------- FILE READ SECTION --------------
     // fp = fopen("CSC1007-SampleCSV.csv", "r");
-    fp = fopen("test_file.csv", "r");
+    fp = fopen("kai_test.csv", "r");
     if (fp != NULL)
     {
         printf("\nFile open successful!\n");

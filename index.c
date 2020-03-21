@@ -128,12 +128,6 @@ void index_delete(File_dir *file_dir, Vcb *vol_Blk,
 
         int fileIdentifier = file.identifier;
 
-        if (fileIdentifier == 0)
-        {
-            printf("\nERROR - File is not within the system!\n");
-            return;
-        }
-
         if (fileIdentifier == identifier)
         {
             // Get index of indexblock

@@ -51,7 +51,7 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
             int counter = 0;
 
             int ptrsNeeded = 0;
-            printf("\n Number of data: %f", numberOfData);
+            //printf("\n Number of data: %.0f", numberOfData);
             
             int blksNeeded = ceil(numberOfData / (vol_Blk->blockSize - 1));
 
@@ -65,17 +65,20 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                                 //is filled
                                 
                 // Generate indexes of blocks to store data at
-                printf("\nBlock needed: %i\n", blksNeeded);
+                //printf("\nBlock needed: %i\n", blksNeeded);
+                int tries = 0;
                 while (filled != blksNeeded)
                 {
-                    int pointer = (rand() % vol_Blk->numFreeData) + vol_Blk->numDirBlock;
-
+                    int pointer = (rand() % (vol_Blk->numTotal));
+                    //printf("\nfreeblock status: %i\tpointer: %i\n", vol_Blk->freeBlock[pointer], pointer);
                     if (vol_Blk->freeBlock[pointer] == 0)
                     {
-                        printf("Block to store at is: %i\n", pointer);
+                        //printf("Block to store at is: %i\n", pointer);
                         vol_Blk->freeBlock[pointer] = 1;
                         blockPointerArr[filled] = pointer;
                         filled++;
+
+                        //printf("counter: %i\n", filled);
                     }
                 }
 

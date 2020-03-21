@@ -14,7 +14,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     int accessCounter = 0;
     printf("\nAdding File: %d", identifier);
 
-    printf("\nNumber of blocks needed: %i",numOfBlocksNeeded);
+    //printf("\nNumber of blocks needed: %i",numOfBlocksNeeded);
 
     int index = 0;
     bool hasFile = false;

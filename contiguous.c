@@ -21,7 +21,10 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
         {
             // Placing data into the entries, adjusted for index position
             for (int d = 0; d < numberOfData; d++)
-                entries[(index - vol_Blk->numDirBlock) * vol_Blk->blockSize + d] = data[d];
+                {
+                    int adjustedIndex = (index - vol_Blk->numDirBlock) * vol_Blk->blockSize + d;
+                    entries[adjustedIndex] = data[d];
+                }
 
             int directoryIndex = dirUpdator(file_dir, vol_Blk, 'c', identifier);
 
@@ -31,8 +34,10 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
 
             // Changing free block states to occupied
             for (int i = 0; i < numberOfBlocksNeeded; i++)
-                vol_Blk->freeBlock[index + i] = 1;
-            
+                {
+                    vol_Blk->freeBlock[index + i] = 1;
+                }
+
             // Printing access count
             printf("\nAccess Count: %d\n", accessCounter);
             // Adding to total access counts

@@ -382,33 +382,7 @@ int main(int argc, char **argv)
         }
     }
 
-    //freePointers(entries, &vol_Blk, block_Array, &file_dir, fp);
-    free(file_dir.ctg_block);
-    printf("\nFree contiguous\n");
-
-    free(file_dir.linked_block);
-    printf("Free linked\n");
-
-    free(file_dir.indexed_block);
-    printf("Free indexed\n");
-
-    free(file_dir.lindex_block);
-    printf("Free blackops\n");
-
-    free(vol_Blk.freeBlock);
-    printf("Free vcb\n");
-
-    free(block_Array);
-    printf("Free blocks\n");
-
-    free(entries);
-    printf("Free entries\n");
-
-    //unique file needs to be freed
-
-    fclose(fp);
-    printf("Free file pointer\n");
-
+    freePointers(entries, &vol_Blk, block_Array, &file_dir, fp);
     printf("\nThank you for using Shrodinger's OS\n");
     printf("\n----------- End of Program ------------\n");
     return 0;

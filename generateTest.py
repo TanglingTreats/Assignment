@@ -7,7 +7,7 @@ writer = csv.writer(f)
 f.close()
 
 # choices
-option = "add3"
+option = "random"
 methodChoices = ["add", "delete", "read"]
 
 # parameters
@@ -197,7 +197,7 @@ def randomly():
             # add to current files
             currentfiles.append(file)
             # generate file length
-            filelength = random.randint(10,130)
+            filelength = random.randint(minimumFileSize, maximumFileSize)
             # generate content
             for x in range(file, file+filelength):
                 row.append(" " + str(x))

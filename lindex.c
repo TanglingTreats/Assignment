@@ -24,9 +24,9 @@ void lindex_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     }
     else
     {
-        while(file_dir->blackOps_block[index].identifier != 0)
+        while(file_dir->lindex_block[index].identifier != 0)
         {
-            if(file_dir->blackOps_block[index].identifier == identifier)
+            if(file_dir->lindex_block[index].identifier == identifier)
             {
                 hasFile = true;
                 break;
@@ -65,7 +65,7 @@ void lindex_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
                 int dirBlkIndex = nextFreeSpaceIndex(vol_Blk, &accessCounter);
                 vol_Blk->freeBlock[dirBlkIndex] = 1;
-                file_dir->blackOps_block[dirIndex].start = dirBlkIndex; 
+                file_dir->lindex_block[dirIndex].start = dirBlkIndex; 
 
                 int dirBlkEntry = block_Array[dirBlkIndex - vol_Blk->numDirBlock].start;
                 int i = 0;
@@ -111,7 +111,7 @@ void lindex_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                     numBlksCount--;
                 }
 
-                file_dir->blackOps_block[dirIndex].end = dirBlkIndex; 
+                file_dir->lindex_block[dirIndex].end = dirBlkIndex; 
                 printf("\nAccess Count: %d\n", accessCounter);
             }
             else 
@@ -135,10 +135,10 @@ void lindex_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bloc
     bool hasFound = false;
 
     int i = 0;
-    while(file_dir->blackOps_block[i].identifier != 0)
+    while(file_dir->lindex_block[i].identifier != 0)
     {
-        int startBlk = file_dir->blackOps_block[i].start;
-        int endBlk = file_dir->blackOps_block[i].end;
+        int startBlk = file_dir->lindex_block[i].start;
+        int endBlk = file_dir->lindex_block[i].end;
 
         if(startBlk != endBlk)
         {
@@ -188,7 +188,6 @@ void lindex_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bloc
                 {
                     break;
                 }
-                
             }
         }
         else
@@ -246,7 +245,7 @@ void lindex_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bloc
     }
     else
     {
-        printf("\nFile Name: %d, Block Number: %d, Entry Number: %d", file_dir->blackOps_block[i].identifier, blockPos, entryPos);
+        printf("\nFile Name: %d, Block Number: %d, Entry Number: %d", file_dir->lindex_block[i].identifier, blockPos, entryPos);
         printf("\nAccess Count: %d\n", accessCounter);
     }
 }
@@ -257,14 +256,14 @@ void lindex_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     printf("\nDeleting File: %d\n", identifier);
 
     int fileIndex = 0;
-    while(file_dir->blackOps_block[fileIndex].identifier != 0)
+    while(file_dir->lindex_block[fileIndex].identifier != 0)
     {
-        if(file_dir->blackOps_block[fileIndex].identifier == identifier)
+        if(file_dir->lindex_block[fileIndex].identifier == identifier)
             break;
         fileIndex++;
     }
 
-    if(file_dir->blackOps_block[fileIndex].identifier == 0)
+    if(file_dir->lindex_block[fileIndex].identifier == 0)
     {
         printf("\n ERROR - File is not within the system!");
     }
@@ -272,8 +271,8 @@ void lindex_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     {
         int blockSize = vol_Blk->blockSize;
 
-        int startBlk = file_dir->blackOps_block[fileIndex].start;
-        int endBlk = file_dir->blackOps_block[fileIndex].end;
+        int startBlk = file_dir->lindex_block[fileIndex].start;
+        int endBlk = file_dir->lindex_block[fileIndex].end;
 
         int indexBlk = 0;
 
@@ -364,25 +363,25 @@ void lindex_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
             vol_Blk->freeBlock[indexBlk] = 0;
         }
 
-        if(file_dir->blackOps_block[fileIndex + 1].identifier != 0)
+        if(file_dir->lindex_block[fileIndex + 1].identifier != 0)
         {
             // Shift file up directory
             int j = fileIndex;
             do
             {
-                file_dir->blackOps_block[j].identifier = file_dir->blackOps_block[j + 1].identifier;
-                file_dir->blackOps_block[j].start = file_dir->blackOps_block[j + 1].start;
-                file_dir->blackOps_block[j].end = file_dir->blackOps_block[j + 1].end;
+                file_dir->lindex_block[j].identifier = file_dir->lindex_block[j + 1].identifier;
+                file_dir->lindex_block[j].start = file_dir->lindex_block[j + 1].start;
+                file_dir->lindex_block[j].end = file_dir->lindex_block[j + 1].end;
 
                 j++;
-            } while (file_dir->blackOps_block[j].identifier != 0);
+            } while (file_dir->lindex_block[j].identifier != 0);
             
         }
         else
         {
-            file_dir->blackOps_block[fileIndex].identifier = 0;
-            file_dir->blackOps_block[fileIndex].start = 0;
-            file_dir->blackOps_block[fileIndex].end = 0;
+            file_dir->lindex_block[fileIndex].identifier = 0;
+            file_dir->lindex_block[fileIndex].start = 0;
+            file_dir->lindex_block[fileIndex].end = 0;
         }
     }
 }

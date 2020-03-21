@@ -248,13 +248,13 @@ int main(int argc, char **argv)
                     int numOfBlocksNeeded = ceil(((float)fileDataSize - 1) / vol_Blk.blockSize);
 
                     // Initialise data of file
+                    fileData = &fileInfo[1];
                     if(fileDataSize == 1)
                     {
                         fileData = (int *)calloc(1, sizeof(int));
                     }
                     else
                     {
-                        fileData = &fileInfo[1];
                         printf("\nData: %i", fileInfo[1]);
                     }
 
@@ -326,6 +326,12 @@ int main(int argc, char **argv)
                         lindex_delete(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
                     }
                 }
+
+                free(fileInfo);
+                if(fileDataSize == 1)
+                {
+                    free(fileData);
+                }
             }
             // Print Output
             printdisk(&vol_Blk, &file_dir, entries, choice);
@@ -362,7 +368,32 @@ int main(int argc, char **argv)
         }
     }
 
-    freePointers(entries, &vol_Blk, block_Array, &file_dir, fp);
+    //freePointers(entries, &vol_Blk, block_Array, &file_dir, fp);
+    free(file_dir.ctg_block);
+    printf("\nFree contiguous\n");
+
+    free(file_dir.linked_block);
+    printf("Free linked\n");
+
+    free(file_dir.indexed_block);
+    printf("Free indexed\n");
+
+    free(file_dir.lindex_block);
+    printf("Free blackops\n");
+
+    free(vol_Blk.freeBlock);
+    printf("Free vcb\n");
+
+    free(block_Array);
+    printf("Free blocks\n");
+
+    free(entries);
+    printf("Free entries\n");
+
+    //unique file needs to be freed
+
+    fclose(fp);
+    printf("Free file pointer\n");
 
     printf("\nThank you for using Shrodinger's OS\n");
     printf("\n----------- End of Program ------------\n");
@@ -387,7 +418,7 @@ void freePointers(int *entries, Vcb *vcb, Block *block_Array, File_dir *file_dir
     free(file_dir->indexed_block);
     printf("Free indexed\n");
 
-    free(file_dir->blackOps_block);
+    free(file_dir->lindex_block);
     printf("Free blackops\n");
 
     free(vcb->freeBlock);

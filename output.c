@@ -36,9 +36,9 @@ void printdisk(Vcb *vol_Blk, File_dir *file_dir, int *entries, int choice)
         }
         else if (choice == 3)
         {
-            printf("\n\tFile ID: %d", file_dir->blackOps_block[i].identifier);
-            printf("\nStart:\t%d", file_dir->blackOps_block[i].start);
-            printf("\nEnd:\t%d", file_dir->blackOps_block[i].end);
+            printf("\n\tFile ID: %d", file_dir->lindex_block[i].identifier);
+            printf("\nStart:\t%d", file_dir->lindex_block[i].start);
+            printf("\nEnd:\t%d", file_dir->lindex_block[i].end);
         }
     }
     printf("\n");

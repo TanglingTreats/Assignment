@@ -15,10 +15,10 @@
 
 void lindex_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                int numOfBlocksNeeded, int numberOfData, int *data,
-               int identifier, int *entries);
+               int identifier, int *entries, int *accessCounts);
 
 void lindex_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block_Array,
-                int data, int *entries);
+                int data, int *entries, int *accessCounts);
 
 void lindex_delete(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                   int identifier, int *entries);

@@ -9,7 +9,7 @@
 
 void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                 float numberOfData, int *data,
-                int identifier, int *entries)
+                int identifier, int *entries, int *accessCounts)
 {
     // Calculate number of blocks needed for allocation
     // Create an array of size of number of blocks needed
@@ -108,13 +108,14 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
         }
         
         printf("\nAccess Count: %d\n", accessCounter);
+        *accessCounts += accessCounter;
     }
     
     return;
 }
 
 void linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block_Array,
-                int data, const int *entries)
+                int data, const int *entries, int *accessCounts)
 {
     // Required information: File name, block number and entry number
     // Loop through file directory one by by
@@ -183,6 +184,7 @@ void linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bloc
     {
         printf("\nFile Name: %d, Block Number: %d, Entry Number: %d", file_dir->linked_block[i].identifier, blockPos, entryPos);
         printf("\nAccess Count: %d\n", accessCounter);
+        *accessCounts += accessCounter;
     }
 }
 

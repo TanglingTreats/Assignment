@@ -28,6 +28,10 @@
 void printInputError();
 void freePointers(int *entries,Vcb *vcb, Block *block_Array, File_dir *file_dir, FILE *file);
 
+// accesscounters
+int accessCounts[4] = {0,0,0,0};
+int *accessCounts_ptr = accessCounts;
+
 int main(int argc, char **argv)
 {
     char *inputName;
@@ -189,7 +193,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        fp = fopen("kai_test.csv", "r");
+        fp = fopen("test_file.csv", "r");
     }
     if (fp != NULL)
     {
@@ -233,6 +237,8 @@ int main(int argc, char **argv)
             //  The total size of the file including the identifier
             int fileDataSize = 0;
 
+            int instructionCount = 0;
+            int dataUtilisation = 0;
             while (readFile(fp, comm, &fileInfo, &fileDataSize))
             {
                 // printf("\nNumber of loops: %i\n", loopCounter++);
@@ -259,23 +265,23 @@ int main(int argc, char **argv)
                     {
                         // contiguous
                         contiguous_add(&file_dir, &vol_Blk, numOfBlocksNeeded, fileDataSize - 1,
-                                    fileData, fileIdentifier, entries);
+                                    fileData, fileIdentifier, entries, &accessCounts_ptr[0]);
                     }
                     else if (choice == 1)
                     {
                         linked_add(&file_dir, &vol_Blk, block_Array, fileDataSize - 1, 
-                                    fileData, fileIdentifier, entries);
+                                    fileData, fileIdentifier, entries, &accessCounts_ptr[1]);
                     }
                     else if (choice == 2)
                     {
                         // indexed
                         index_add(&file_dir, &vol_Blk, numOfBlocksNeeded, fileDataSize - 1,
-                                    fileData, fileIdentifier, entries);
+                                    fileData, fileIdentifier, entries, &accessCounts_ptr[2]);
                     }
                     else if (choice == 3)
                     {
                         lindex_add(&file_dir, &vol_Blk, block_Array, numOfBlocksNeeded, fileDataSize - 1, 
-                                    fileData, fileIdentifier, entries);
+                                    fileData, fileIdentifier, entries, &accessCounts_ptr[3]);
                     }
                 }
                 // If reading, fileInfo has only 1 element inside
@@ -284,22 +290,22 @@ int main(int argc, char **argv)
                     if (choice == 0)
                     {
                         // contiguous
-                        contiguous_read(&file_dir, &vol_Blk, fileIdentifier, entries);
+                        contiguous_read(&file_dir, &vol_Blk, fileIdentifier, entries, &accessCounts_ptr[0]);
                     }
                     else if (choice == 1)
                     {
                         // linked
-                        linked_read(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
+                        linked_read(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries, &accessCounts_ptr[1]);
                     }
                     else if (choice == 2)
                     {
                         // index
-                        index_read(&file_dir, &vol_Blk, fileIdentifier, entries);
+                        index_read(&file_dir, &vol_Blk, fileIdentifier, entries, &accessCounts_ptr[2]);
                     }
                     else if (choice == 3)
                     {
                         // black ops
-                        lindex_read(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
+                        lindex_read(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries, &accessCounts_ptr[3]);
                     }
                 }
                 // If deleting, fileInfo has only 1 element inside
@@ -323,26 +329,43 @@ int main(int argc, char **argv)
                         lindex_delete(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
                     }
                 }
+
+                instructionCount++;
+                for (int i = 0; i < vol_Blk.numData; i++)
+                    if (entries[i] == -1)
+                        dataUtilisation++;
             }
             // Print Output
             printdisk(&vol_Blk, &file_dir, entries, choice);
 
             if(choice == 0)
             {
-                printf("0 - Contiguous Allocation\n");
+                printf("Contiguous Allocation\n");
+                printf("Total Access counts: %d", accessCounts_ptr[0]);
+                accessCounts_ptr[0] = 0;
             }
             else if(choice == 1)
             {
-                printf("1 - Linked Allocation\n");
+                printf("Linked Allocation\n");
+                printf("Total Access counts: %d", accessCounts_ptr[1]);
+                accessCounts_ptr[1] = 0;
             }
             else if(choice == 2)
             {
-                printf("2 - Indexed Allocation\n");
+                printf("Indexed Allocation\n");
+                printf("Total Access counts: %d", accessCounts_ptr[2]);
+                accessCounts_ptr[2] = 0;
             }
             else if(choice == 3)
             {
-                printf("3 - Unique Allocation\n");
-            }
+                printf("Unique Allocation\n");
+                printf("Total Access counts: %d", accessCounts_ptr[3]);
+                accessCounts_ptr[3] = 0;
+            }            
+            printf("\nSpace Utilisation: %0.2f%%\n", (instructionCount * vol_Blk.numData - dataUtilisation * 1.0) / (instructionCount * vol_Blk.numData) * 100);
+            dataUtilisation = 0;
+            instructionCount = 0;
+
             flushFileData(&file_dir, &vol_Blk, entries);
 
             // Reset choice

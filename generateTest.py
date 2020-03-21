@@ -7,7 +7,7 @@ writer = csv.writer(f)
 f.close()
 
 # choices
-option = "random"
+option = "add3"
 methodChoices = ["add", "delete", "read"]
 
 # parameters

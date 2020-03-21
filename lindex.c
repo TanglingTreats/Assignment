@@ -9,7 +9,7 @@
 
 void lindex_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                int numOfBlocksNeeded, int numberOfData, int *data,
-               int identifier, int *entries)
+               int identifier, int *entries, int *accessCounts)
 {
     int accessCounter = 0;
     printf("\nAdding File: %d", identifier);
@@ -113,6 +113,7 @@ void lindex_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
                 file_dir->lindex_block[dirIndex].end = dirBlkIndex; 
                 printf("\nAccess Count: %d\n", accessCounter);
+                *accessCounts += accessCounter;
             }
             else 
             {
@@ -123,7 +124,7 @@ void lindex_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 }
 
 void lindex_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block_Array,
-                int data, int *entries)
+                int data, int *entries, int *accessCounts)
 {
     printf("\nReading file: %d", data);
 
@@ -247,6 +248,7 @@ void lindex_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bloc
     {
         printf("\nFile Name: %d, Block Number: %d, Entry Number: %d", file_dir->lindex_block[i].identifier, blockPos, entryPos);
         printf("\nAccess Count: %d\n", accessCounter);
+        *accessCounts += accessCounter;
     }
 }
 

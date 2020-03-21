@@ -10,7 +10,7 @@
 
 void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
                     int numberOfBlocksNeeded, int numberOfData, int *data,
-                    int identifier, int *entries)
+                    int identifier, int *entries, int *accessCounts)
 {
     int accessCounter = 0;
     printf("\nAdding File: %d", identifier);
@@ -35,6 +35,8 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
             
             // Printing access count
             printf("\nAccess Count: %d\n", accessCounter);
+            // Adding to total access counts
+            *accessCounts += accessCounter;
             return;
         }
         printf("\nERROR- Not enough contiguous blocks for data.\n");
@@ -45,7 +47,7 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
 }
 
 void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
-                     int data, int *entries)
+                     int data, int *entries, int *accessCounts)
 {
     printf("\nReading file: %d", data);
     int accessCounter = 0;
@@ -68,6 +70,7 @@ void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
                     printf("\nFile Name: %d, Block Number: %d, Entry Number: %d",
                            file.identifier, (block + file.start), adjustedIndex + vol_Blk->blockSize * file.start);
                     printf("\nAccess Count: %d\n", accessCounter);
+                    *accessCounts += accessCounter;
                     return;
                 }
             }

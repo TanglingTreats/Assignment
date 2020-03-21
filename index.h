@@ -12,11 +12,11 @@
 
 void index_add(File_dir *file_dir, Vcb *vol_Blk,
                int numberOfBlocksNeeded, int numberOfData, int *data,
-               int identifier, int *entries);
+               int identifier, int *entries, int*accessCounts);
 
 // Prints name, block number, entry number
 void index_read(File_dir *file_dir, Vcb *vol_Blk,
-                int data, int *entries);
+                int data, int *entries, int*accessCounts);
 
 // Deletes File, resets used entries to -1, and frees up blocks
 void index_delete(File_dir *file_dir, Vcb *vol_Blk,

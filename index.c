@@ -9,7 +9,7 @@
 
 void index_add(File_dir *file_dir, Vcb *vol_Blk,
                int numberOfBlocksNeeded, int numberOfData, int *data,
-               int identifier, int *entries)
+               int identifier, int *entries, int*accessCounts)
 {
     int accessCounter = 0;
     printf("\nAdding File: %d", identifier);
@@ -51,12 +51,13 @@ void index_add(File_dir *file_dir, Vcb *vol_Blk,
         }
     }
     printf("\nAccess Count: %d\n", accessCounter);
+    *accessCounts += accessCounter;
     return;
 }
 
 // Prints name, block number, entry number
 void index_read(File_dir *file_dir, Vcb *vol_Blk,
-                int data, int *entries)
+                int data, int *entries, int*accessCounts)
 {
     printf("\nReading file: %d", data);
     int accessCounter = 0;
@@ -103,6 +104,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
                     printf("\nFile Name: %d, Block Number: %d, Entry Number: %d",
                            file.identifier, blockIndex, adjustedIndex + vol_Blk->numDirBlock * blockSize);
                     printf("Access Count: %d\n", accessCounter);
+                    *accessCounts += accessCounter;
                     return;
                 }
             }

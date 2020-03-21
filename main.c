@@ -1,11 +1,8 @@
 /*
  Program: main.c. Starting point of the program.
  Created on: 24 Jan 2020
- Edited on: 7 Mar 2020
+ Edited on: 21 Mar 2020
  Created by: Edwin
-
- Algorithm:
- - Prompt desired block size
 
  Error codes:
  -1 - Memory allocation failed

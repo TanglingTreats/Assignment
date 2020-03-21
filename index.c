@@ -122,9 +122,9 @@ void index_delete(File_dir *file_dir, Vcb *vol_Blk,
     int blockSize = vol_Blk->blockSize;
 
     // Access file dir, to find the index blocks of individual files
-    for (int indexOffile_dir = 0; indexOffile_dir < vol_Blk->numDirBlock * blockSize; indexOffile_dir++)
+    for (int indexOfFile_dir = 0; indexOfFile_dir < vol_Blk->numDirBlock * blockSize; indexOfFile_dir++)
     {
-        Indexed_file_dir file = file_dir->indexed_block[indexOffile_dir];
+        Indexed_file_dir file = file_dir->indexed_block[indexOfFile_dir];
 
         int fileIdentifier = file.identifier;
 
@@ -154,8 +154,8 @@ void index_delete(File_dir *file_dir, Vcb *vol_Blk,
                 entries[blockSize * (indexOfindexBlock - vol_Blk->numDirBlock) + indexBlock_iterator] = -1;
             }
             // Removing from file directory
-            file_dir->indexed_block[indexOffile_dir].pos = 0;
-            file_dir->indexed_block[indexOffile_dir].identifier = 0;
+            file_dir->indexed_block[indexOfFile_dir].pos = 0;
+            file_dir->indexed_block[indexOfFile_dir].identifier = 0;
 
             // Freeing up index block
             vol_Blk->freeBlock[indexOfindexBlock] = 0;

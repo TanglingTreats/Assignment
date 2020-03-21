@@ -1,7 +1,7 @@
 /*
  Program: linked.c. Contains function implementations for linked allocation method
  Created on: 6 Mar 2020
- Edited on: 7 Mar 2020
+ Edited on: 21 Mar 2020
  Created by: Edwin
 */
 
@@ -13,6 +13,20 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 {
     int accessCounter = 0;
     printf("\nAdding File: %d", identifier);
+
+    int index = 0;
+    bool hasFile = false;
+    while(file_dir->linked_block[index].identifier != 0)
+    {
+        if(file_dir->linked_block[index].identifier == identifier)
+        {
+            hasFile = true;
+            break;
+        }
+        index++;
+    }
+
+
     // Calculate number of blocks needed for allocation
     // Create an array of size of number of blocks needed
     // Generate a random number from first and last index in block_array
@@ -21,87 +35,76 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     // If array is full, start allocation
 
     // Keeps track of cycle of calculation
-    int counter = 0;
-
-    int ptrsNeeded = 0;
-
-    printf("\nNumber of data: %.0f", numberOfData);
-
-    int blksNeeded = ceil(numberOfData / (vol_Blk->blockSize - 1));
-
-    ptrsNeeded = blksNeeded - 1;
-
-    // printf("Pointers needed: %i\n", ptrsNeeded);
-    // printf("Blocks needed with pointers: %i\n", blksNeeded);
-
-    if (blksNeeded <= checkFreeSpace(vol_Blk, &accessCounter))
+    if(hasFile) 
     {
-        // Contains list of blocks to store at
-        int *blockPointerArr = (int *)calloc(blksNeeded, sizeof(int));
-        int filled = 0; // keeps track of whether blockPointerArr
-                        //is filled
-        // Generate indexes of blocks to store data at
-        while (filled != blksNeeded)
-        {
-            int pointer = (rand() % vol_Blk->numFreeData) + vol_Blk->numDirBlock;
-
-            if (vol_Blk->freeBlock[pointer] == 0)
-            {
-                //printf("Block to store at is: %i\n", pointer);
-                vol_Blk->freeBlock[pointer] = 1;
-                blockPointerArr[filled] = pointer;
-                filled++;
-            }
-        }
-
-        int i = 0;
-        int dataCount = 0;
-        /*
-        for(i = 0; i < blksNeeded; i++)
-        {
-            printf("Pointer is blockPointerArr[%i]: %i\n", i, blockPointerArr[i]);
-            printf("Actual block[%i] vs array index[%i]: Directory index %i\n", blockPointerArr[i], (blockPointerArr[i] - vol_Blk->numDirBlock), block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].index);
-        }
-        */
-
-        // Allocating data into blocks
-        for (i = 0; i < blksNeeded; i++)
-        {
-            int start = block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].start;
-            int end = block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].end;
-
-            //printf("Start: %i \t End: %i\n", start, end);
-
-            for (; start < end; start++)
-            {
-                if (dataCount < numberOfData)
-                {
-                    entries[start] = data[dataCount];
-                }
-                dataCount++;
-            }
-            if (i < blksNeeded - 1)
-            {
-                entries[end] = blockPointerArr[i + 1];
-            }
-        }
-
-        int directoryIndex = dirUpdator(file_dir, vol_Blk, 'l', identifier);
-
-        file_dir->linked_block[directoryIndex].start = blockPointerArr[0];
-        file_dir->linked_block[directoryIndex].end = blockPointerArr[blksNeeded - 1];
-
-        /*
-        printf("File Directory\n Identifier: %i \t Start: %i \t End: %i \n", 
-            file_dir->linked_block[directoryIndex].identifier, 
-            file_dir->linked_block[directoryIndex].start, 
-            file_dir->linked_block[directoryIndex].end);
-        */
+        printf("\n ERROR - There is a file with the same name in the system!\n");
     }
     else
     {
-        printf("ERROR - File size is too big. File not added.");
+        int counter = 0;
+
+        int ptrsNeeded = 0;
+
+        printf("\nNumber of data: %.0f", numberOfData);
+
+        int blksNeeded = ceil(numberOfData / (vol_Blk->blockSize - 1));
+
+        ptrsNeeded = blksNeeded - 1;
+
+        if (blksNeeded <= checkFreeSpace(vol_Blk, &accessCounter))
+        {
+            // Contains list of blocks to store at
+            int *blockPointerArr = (int *)calloc(blksNeeded, sizeof(int));
+            int filled = 0; // keeps track of whether blockPointerArr
+                            //is filled
+            // Generate indexes of blocks to store data at
+            while (filled != blksNeeded)
+            {
+                int pointer = (rand() % vol_Blk->numFreeData) + vol_Blk->numDirBlock;
+
+                if (vol_Blk->freeBlock[pointer] == 0)
+                {
+                    //printf("Block to store at is: %i\n", pointer);
+                    vol_Blk->freeBlock[pointer] = 1;
+                    blockPointerArr[filled] = pointer;
+                    filled++;
+                }
+            }
+
+            int i = 0;
+            int dataCount = 0;
+
+            // Allocating data into blocks
+            for (i = 0; i < blksNeeded; i++)
+            {
+                int start = block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].start;
+                int end = block_Array[(blockPointerArr[i] - vol_Blk->numDirBlock)].end;
+
+                for (; start < end; start++)
+                {
+                    if (dataCount < numberOfData)
+                    {
+                        entries[start] = data[dataCount];
+                    }
+                    dataCount++;
+                }
+                if (i < blksNeeded - 1)
+                {
+                    entries[end] = blockPointerArr[i + 1];
+                }
+            }
+
+            int directoryIndex = dirUpdator(file_dir, vol_Blk, 'l', identifier);
+
+            file_dir->linked_block[directoryIndex].start = blockPointerArr[0];
+            file_dir->linked_block[directoryIndex].end = blockPointerArr[blksNeeded - 1];
+        }
+        else
+        {
+            printf(" ERROR - File size is too big. File not added.");
+        }
     }
+    
     printf("\nAccess Count: %d\n", accessCounter);
     return;
 }
@@ -176,7 +179,7 @@ int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block
 
     if (blockPos == 0 || entryPos == 0)
     {
-        printf("\nERROR - File is not within the system!\n");
+        printf("\n ERROR - File is not within the system!\n");
     }
     else
     {
@@ -203,11 +206,10 @@ void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
     }
     if (file_dir->linked_block[fileIndex].identifier == 0)
     {
-        printf("ERROR - File is not within the system!\n");
+        printf(" ERROR - File is not within the system!\n");
     }
     else
     {
-        //printf("Index of file within file array is: %i\n", fileIndex);
 
         int startBlock = file_dir->linked_block[fileIndex].start;
 
@@ -240,9 +242,7 @@ void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
             else
             {
                 // Resetting position
-                //printf("Data at entry before deleting: %i\n", entries[startEntry + i]);
                 entries[startEntry + i] = -1;
-                //printf("Data at entry after deleting: %i\n", entries[startEntry + i]);
             }
 
             i++;
@@ -268,14 +268,6 @@ void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
             file_dir->linked_block[fileIndex].start = 0;
             file_dir->linked_block[fileIndex].end = 0;
         }
-
-        //Check file directory
-        // int j = 0;
-        // while (file_dir->linked_block[j].identifier != 0)
-        // {
-        //     printf("Index %i\nIdentifier: %i\tStart: %i\tEnd: %i\n", j, file_dir->linked_block[j].identifier, file_dir->linked_block[j].start, file_dir->linked_block[j].end);
-        //     j++;
-        // }
     }
 
 }

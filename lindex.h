@@ -1,12 +1,12 @@
 /*
- Program: blackops.h. Contains function declarations for unique allocation method
+ Program: lindex.h. Contains function declarations for unique allocation method
  Created on: 12 Mar 2020
- Edited on: 13 Mar 2020
+ Edited on: 21 Mar 2020
  Created by: Edwin
 */
 
-#ifndef BLACKOPS_H
-#define BLACKOPS_H
+#ifndef LINDEX_H
+#define LINDEX_H
 
 #include <stdio.h>
 #include <math.h>

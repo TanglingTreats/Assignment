@@ -11,6 +11,7 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                 float numberOfData, int *data,
                 int identifier, int *entries)
 {
+    int accessCounter = 0;
     printf("\nAdding File: %d\n", identifier);
     // Calculate number of blocks needed for allocation
     // Create an array of size of number of blocks needed
@@ -33,7 +34,7 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     // printf("Pointers needed: %i\n", ptrsNeeded);
     // printf("Blocks needed with pointers: %i\n", blksNeeded);
 
-    if (blksNeeded <= checkFreeSpace(vol_Blk))
+    if (blksNeeded <= checkFreeSpace(vol_Blk, &accessCounter))
     {
         // Contains list of blocks to store at
         int *blockPointerArr = (int *)calloc(blksNeeded, sizeof(int));

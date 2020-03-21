@@ -11,19 +11,20 @@ void index_add(File_dir *file_dir, Vcb *vol_Blk,
                int numberOfBlocksNeeded, int numberOfData, int *data,
                int identifier, int *entries)
 {
+    int accessCounter = 0;
     printf("\nAdding File: %d", identifier);
     // Size of blocks
     int blockSize = vol_Blk->blockSize;
     if (numberOfBlocksNeeded > vol_Blk->blockSize ||
         /* + 1 to account for the index block*/
-        numberOfBlocksNeeded + 1 > checkFreeSpace(vol_Blk))
+        numberOfBlocksNeeded + 1 > checkFreeSpace(vol_Blk, &accessCounter))
     {
         printf("\nERROR - File is too big for storage!\n");
         return;
     }
 
     // Get one data block to store index of other blocks (indexBlock)
-    int indexOfindexBlock = nextFreeSpaceIndex(vol_Blk);
+    int indexOfindexBlock = nextFreeSpaceIndex(vol_Blk, &accessCounter);
 
     // Updates directory to indicate block is used
     int directoryIndex = dirUpdator(file_dir, vol_Blk, 'i', identifier);
@@ -34,7 +35,7 @@ void index_add(File_dir *file_dir, Vcb *vol_Blk,
     for (int block = 0; block < numberOfBlocksNeeded; block++)
     {
         // Get as many data blocks as needed for file
-        int indexCurrentBlock = nextFreeSpaceIndex(vol_Blk);
+        int indexCurrentBlock = nextFreeSpaceIndex(vol_Blk, &accessCounter);
         // Insert block position into indexBlock
         entries[blockSize * (indexOfindexBlock - vol_Blk->numDirBlock) + block] = indexCurrentBlock;
         // Updates directory to indicate block is used

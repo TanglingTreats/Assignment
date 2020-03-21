@@ -29,7 +29,8 @@ void calculateBlock(Vcb *vcb, char option)
     }
 
     printf("\nTotal blocks: %d\n", vcb->numTotal);
-    printf("Number of free blocks: %d\n", checkFreeSpace(vcb));
+    int accessCounter = 0;
+    printf("Number of free blocks: %d\n", checkFreeSpace(vcb, &accessCounter));
     printf("Number of directory blocks: %d\n", vcb->numDirBlock);
 }
 
@@ -251,6 +252,7 @@ bool flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries)
     //     printf("Vol space tracker %i\n", vol_Blk->freeBlock[i]);
     // }
 
-    checkFreeSpace(vol_Blk);
+    int accessCounter = 0;
+    checkFreeSpace(vol_Blk, &accessCounter);
     // printf("\nFree space is now %i\n",vol_Blk->numFreeData );
 }

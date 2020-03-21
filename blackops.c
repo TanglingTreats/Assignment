@@ -11,6 +11,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                int numOfBlocksNeeded, int numberOfData, int *data,
                int identifier, int *entries)
 {
+    int accessCounter = 0;
     printf("\nAdding File: %d\n", identifier);
     
     int numOfDirBlks = 0;
@@ -27,7 +28,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
     //printf("Number of directory blocks needed is: %i\n", numOfDirBlks);
 
-    if((numOfDirBlks + numOfBlocksNeeded) <= checkFreeSpace(vol_Blk))
+    if((numOfDirBlks + numOfBlocksNeeded) <= checkFreeSpace(vol_Blk, &accessCounter))
     {
         bool hasAllocated = false;
 
@@ -39,7 +40,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
         int entryCounter = 0;
 
 
-        int dirBlkIndex = nextFreeSpaceIndex(vol_Blk);
+        int dirBlkIndex = nextFreeSpaceIndex(vol_Blk, &accessCounter);
         vol_Blk->freeBlock[dirBlkIndex] = 1;
         file_dir->blackOps_block[dirIndex].start = dirBlkIndex; 
 
@@ -55,7 +56,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                 // printf("i: %i \t numBlksCountr: %i\n", i, numBlksCount);
                 // printf("If require more index blocks\n");
                 // Get a new index block
-                dirBlkIndex = nextFreeSpaceIndex(vol_Blk);
+                dirBlkIndex = nextFreeSpaceIndex(vol_Blk, &accessCounter);
                 vol_Blk->freeBlock[dirBlkIndex] = 1;
                 entries[dirBlkEntry + i] = dirBlkIndex;
 
@@ -64,7 +65,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
             }
 
             // Get index of dataBlk
-            int dataBlk = nextFreeSpaceIndex(vol_Blk);
+            int dataBlk = nextFreeSpaceIndex(vol_Blk, &accessCounter);
             vol_Blk->freeBlock[dataBlk] = 1;
 
             // Add index of data block to index block

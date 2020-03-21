@@ -49,9 +49,6 @@ void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
 {
     printf("\nReading file: %d", data);
     int accessCounter = 0;
-    int block, entryNumber, name;
-    // Print name, block number, entry number
-
     int fileNumber = 0;
 
     // Go through each file in directory

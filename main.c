@@ -233,9 +233,6 @@ int main(int argc, char **argv)
             //  The total size of the file including the identifier
             int fileDataSize = 0;
 
-            // Number of blocks needed to store a particular file
-            int numOfBlocksNeeded = 0;
-            int loopCounter = 0;
             while (readFile(fp, comm, &fileInfo, &fileDataSize))
             {
                 // printf("\nNumber of loops: %i\n", loopCounter++);
@@ -325,12 +322,6 @@ int main(int argc, char **argv)
                     {
                         lindex_delete(&file_dir, &vol_Blk, block_Array, fileIdentifier, entries);
                     }
-                }
-
-                free(fileInfo);
-                if(fileDataSize == 1)
-                {
-                    free(fileData);
                 }
             }
             // Print Output

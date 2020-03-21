@@ -161,6 +161,7 @@ int dirUpdator(File_dir *file_dir, Vcb *vol_Blk, char option, int identifier)
                 }
             }
     }
+    return 0;
 }
 
 // Checks amount of free space in the file system.
@@ -186,6 +187,7 @@ int nextFreeSpaceIndex(Vcb *vol_Blk, int *accessCounter)
         if (vol_Blk->freeBlock[i] == 0)
             return i;
     }
+    return 0;
 }
 
 int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded, int *accessCounter)
@@ -211,7 +213,7 @@ int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded, int *accessCounter
     return -1;
 }
 
-bool flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries)
+void flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries)
 {
     int numOfDir = vol_Blk->numDirBlock * vol_Blk->blockSize;
 

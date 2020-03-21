@@ -48,14 +48,8 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
         }
         else
         {
-            int counter = 0;
-
-            int ptrsNeeded = 0;
-            //printf("\n Number of data: %.0f", numberOfData);
             
             int blksNeeded = ceil(numberOfData / (vol_Blk->blockSize - 1));
-
-            ptrsNeeded = blksNeeded - 1;
 
             if (blksNeeded <= checkFreeSpace(vol_Blk, &accessCounter))
             {
@@ -65,20 +59,15 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                                 //is filled
                                 
                 // Generate indexes of blocks to store data at
-                //printf("\nBlock needed: %i\n", blksNeeded);
-                int tries = 0;
                 while (filled != blksNeeded)
                 {
                     int pointer = (rand() % (vol_Blk->numTotal));
-                    //printf("\nfreeblock status: %i\tpointer: %i\n", vol_Blk->freeBlock[pointer], pointer);
                     if (vol_Blk->freeBlock[pointer] == 0)
                     {
                         //printf("Block to store at is: %i\n", pointer);
                         vol_Blk->freeBlock[pointer] = 1;
                         blockPointerArr[filled] = pointer;
                         filled++;
-
-                        //printf("counter: %i\n", filled);
                     }
                 }
 
@@ -124,7 +113,7 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     return;
 }
 
-int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block_Array,
+void linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block_Array,
                 int data, const int *entries)
 {
     // Required information: File name, block number and entry number
@@ -142,15 +131,10 @@ int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block
     // Loop through file directory while there is still a file
     while (file_dir->linked_block[i].identifier != 0)
     {
-        //printf("File identifier: %i\n", file_dir->linked_block[i].identifier);
 
         blockPos = file_dir->linked_block[i].start;
 
-        //printf("Starting block: %i\n", blockPos);
-
         int startEntry = block_Array[blockPos - vol_Blk->numDirBlock].start;
-
-        //printf("Starting entry: %i\n", startEntry);
 
         int blockSize = vol_Blk->blockSize;
 
@@ -159,7 +143,6 @@ int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block
         for (j = 0; j < blockSize; j++)
         {
             accessCounter++;
-            //printf("Data in entry[%i]: %i\n", startEntry + j, entries[startEntry + j]);
             if (entries[startEntry + j] == data)
             {
                 entryPos = (startEntry + j) + (vol_Blk->numDirBlock * vol_Blk->blockSize);
@@ -225,7 +208,6 @@ void linked_delete(File_dir *file_dir, Vcb *vol_Blk, const Block *block_Array,
     }
     else
     {
-        //printf("Deleting file %i\n", identifier);
 
         int startBlock = file_dir->linked_block[fileIndex].start;
 

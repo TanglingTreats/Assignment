@@ -9,9 +9,6 @@
 
 bool readFile (FILE *file, char *comm, int **data, int *size)
 {
-    //counter for getting number of lines
-    int counter = 0;
-
     char buf[1024];
     char intBuf[3];
 

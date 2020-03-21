@@ -167,7 +167,7 @@ int dirUpdator(File_dir *file_dir, Vcb *vol_Blk, char option, int identifier)
 // Restarts numbering to 0, and checks accordingly.
 int checkFreeSpace(Vcb *vol_Blk, int *accessCounter)
 {
-    accessCounter += vol_Blk->numTotal;
+    *accessCounter += vol_Blk->numTotal;
     vol_Blk->numFreeData = 0;
     for (int i = 0; i < vol_Blk->numTotal; i++)
     {
@@ -182,7 +182,7 @@ int nextFreeSpaceIndex(Vcb *vol_Blk, int *accessCounter)
 {
     for (int i = 0; i < vol_Blk->numTotal; i++)
     {
-        accessCounter++;
+        *accessCounter+=1;
         if (vol_Blk->freeBlock[i] == 0)
             return i;
     }
@@ -197,7 +197,7 @@ int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded, int *accessCounter
             bool pass = true;
             for (int bN = 1; bN < blocksNeeded; bN++)
             {
-                accessCounter++;
+                // DEBUGGING
                 if (vol_Blk->freeBlock[bN + i] == 1)
                     pass = false;
             }

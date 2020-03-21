@@ -12,7 +12,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                int identifier, int *entries)
 {
     int accessCounter = 0;
-    printf("\nAdding File: %d\n", identifier);
+    printf("\nAdding File: %d", identifier);
     
     int numOfDirBlks = 0;
     //printf("Number of blocks needed: %i\n", numOfBlocksNeeded);
@@ -95,7 +95,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
         }
 
         file_dir->blackOps_block[dirIndex].end = dirBlkIndex; 
-        
+        printf("\nAccess Count: %d\n", accessCounter);
         //printf("Start blk: %i\t End blk: %i\n", file_dir->blackOps_block[dirIndex].start, file_dir->blackOps_block[dirIndex].end);
     }
     else 
@@ -108,8 +108,9 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 void blackOps_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block_Array,
                 int data, int *entries)
 {
-    printf("\nReading file: %d\n", data);
+    printf("\nReading file: %d", data);
 
+    int accessCounter = 0;
     int blockPos = 0;
     int entryPos = 0;
     int blockSize = vol_Blk->blockSize;
@@ -154,6 +155,7 @@ void blackOps_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bl
                 int k = 0;
                 for(k = 0; k < blockSize; k++)
                 {
+                    accessCounter++;
                     if(entries[startEntry + k] == data)
                     {
                         entryPos = startEntry + k + (vol_Blk->blockSize * vol_Blk->numDirBlock);
@@ -187,6 +189,7 @@ void blackOps_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bl
                 int k = 0;
                 for(k = 0; k < blockSize; k++)
                 {
+                    accessCounter++;
                     //printf("Start entry %i\n", startEntry);
                     //printf("Start entry data: %i\n", entries[startEntry + k]);
                     if(entries[startEntry + k] == data)
@@ -226,11 +229,12 @@ void blackOps_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *bl
 
     if (blockPos == 0 || entryPos == 0)
     {
-        printf("File not found!\n");
+        printf("\nERROR - File is not within the system!\n");
     }
     else
     {
-        printf("File Name: %d, Block Number: %d, Entry Number: %d\n", file_dir->blackOps_block[i].identifier, blockPos, entryPos);
+        printf("\nFile Name: %d, Block Number: %d, Entry Number: %d", file_dir->blackOps_block[i].identifier, blockPos, entryPos);
+        printf("\nAccess Count: %d\n", accessCounter);
     }
 }
 

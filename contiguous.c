@@ -15,7 +15,7 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
     int accessCounter = 0;
     printf("\nAdding File: %d", identifier);
     if (checkFreeSpace(vol_Blk, &accessCounter) >= numberOfBlocksNeeded)
-    {
+    {   
         int index = freeSpaceIndex_contiguous(vol_Blk, numberOfBlocksNeeded, &accessCounter);
         if (index > -1)
         {
@@ -32,8 +32,9 @@ void contiguous_add(File_dir *file_dir, Vcb *vol_Blk,
             // Changing free block states to occupied
             for (int i = 0; i < numberOfBlocksNeeded; i++)
                 vol_Blk->freeBlock[index + i] = 1;
-
-            printf("\nAccess Count: %d", accessCounter);
+            
+            // Printing access count
+            printf("\nAccess Count: %d\n", accessCounter);
             return;
         }
         printf("\nERROR- Not enough contiguous blocks for data.\n");
@@ -47,6 +48,7 @@ void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
                      int data, int *entries)
 {
     printf("\nReading file: %d", data);
+    int accessCounter = 0;
     int block, entryNumber, name;
     // Print name, block number, entry number
 
@@ -62,11 +64,13 @@ void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
         {
             for (int index = 0; index < vol_Blk->blockSize; index++)
             {
+                accessCounter++;
                 int adjustedIndex = index + (block * vol_Blk->blockSize);
                 if (entries[adjustedIndex] == data)
                 {
                     printf("\nFile Name: %d, Block Number: %d, Entry Number: %d",
                            file.identifier, (block + file.start), adjustedIndex + vol_Blk->blockSize * file.start);
+                    printf("\nAccess Count: %d\n", accessCounter);
                     return;
                 }
             }
@@ -74,7 +78,7 @@ void contiguous_read(File_dir *file_dir, Vcb *vol_Blk,
         fileNumber += 1;
     }
     // This is unreachable unless file does not exist
-    printf("\nFile does not exist.");
+    printf("\nERROR - File is not within the system!\n");
     return;
 }
 
@@ -102,10 +106,12 @@ void contiguous_delete(File_dir *file_dir, Vcb *vol_Blk,
             file_dir->ctg_block[index].length = 0;
             file_dir->ctg_block[index].identifier = 0;
 
+            // Display formatting
+            printf("\n");
             return;
         }
     }
     // This is unreachable unless file does not exist
-    printf("\nFile does not exist.");
+    printf("\nError: File does not exist.\n");
     return;
 }

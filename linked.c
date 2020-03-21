@@ -12,7 +12,7 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
                 int identifier, int *entries)
 {
     int accessCounter = 0;
-    printf("\nAdding File: %d\n", identifier);
+    printf("\nAdding File: %d", identifier);
     // Calculate number of blocks needed for allocation
     // Create an array of size of number of blocks needed
     // Generate a random number from first and last index in block_array
@@ -25,7 +25,7 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
     int ptrsNeeded = 0;
 
-    printf("Number of data: %.0f\n", numberOfData);
+    printf("\nNumber of data: %.0f", numberOfData);
 
     int blksNeeded = ceil(numberOfData / (vol_Blk->blockSize - 1));
 
@@ -102,6 +102,8 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     {
         printf("ERROR - File size is too big. File not added.");
     }
+    printf("\nAccess Count: %d\n", accessCounter);
+    return;
 }
 
 int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block_Array,
@@ -111,7 +113,8 @@ int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block
     // Loop through file directory one by by
     // For each file, loop through until a file is found and return block and entry index
 
-    printf("\nReading file: %d\n", data);
+    printf("\nReading file: %d", data);
+    int accessCounter = 0;
 
     // Keep track of block count
     int blockPos = 0;
@@ -137,6 +140,7 @@ int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block
 
         for (j = 0; j < blockSize; j++)
         {
+            accessCounter++;
             //printf("Data in entry[%i]: %i\n", startEntry + j, entries[startEntry + j]);
             if (entries[startEntry + j] == data)
             {
@@ -172,11 +176,12 @@ int linked_read(const File_dir *file_dir, const Vcb *vol_Blk, const Block *block
 
     if (blockPos == 0 || entryPos == 0)
     {
-        printf("File not found!\n");
+        printf("\nERROR - File is not within the system!\n");
     }
     else
     {
-        printf("File Name: %d, Block Number: %d, Entry Number: %d\n", file_dir->linked_block[i].identifier, blockPos, entryPos);
+        printf("\nFile Name: %d, Block Number: %d, Entry Number: %d", file_dir->linked_block[i].identifier, blockPos, entryPos);
+        printf("\nAccess Count: %d\n", accessCounter);
     }
 }
 

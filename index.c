@@ -50,6 +50,8 @@ void index_add(File_dir *file_dir, Vcb *vol_Blk,
             i++;
         }
     }
+    printf("\nAccess Count: %d\n", accessCounter);
+    return;
 }
 
 // Prints name, block number, entry number
@@ -57,6 +59,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
                 int data, int *entries)
 {
     printf("\nReading file: %d", data);
+    int accessCounter = 0;
     // Get blocksize, easier to work with afterwards
     int blockSize = vol_Blk->blockSize;
 
@@ -69,7 +72,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
 
         if (fileIdentifier == 0)
         {
-            printf("\nFile does not exist.");
+            printf("\nERROR - File is not within the system!\n");
             return;
         }
 
@@ -89,6 +92,7 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
             // Go into the blocks that indexBlock is pointing to
             for (int entriesIndex = 0; entriesIndex < blockSize; entriesIndex++)
             {
+                accessCounter++;
                 int adjustedIndex = blockSize * (blockIndex - vol_Blk->numDirBlock) + entriesIndex;
 
                 // printf("\nadjustedIndex: %d", adjustedIndex);
@@ -98,13 +102,14 @@ void index_read(File_dir *file_dir, Vcb *vol_Blk,
                     // Prints name, block number, entry number if matches
                     printf("\nFile Name: %d, Block Number: %d, Entry Number: %d",
                            file.identifier, blockIndex, adjustedIndex + vol_Blk->numDirBlock * blockSize);
+                    printf("Access Count: %d\n", accessCounter);
                     return;
                 }
             }
         }
     }
     // This is unreachable unless file does not exist
-    printf("\nFile does not exist.");
+    printf("\nERROR - File is not within the system!\n");
     return;
 }
 
@@ -125,7 +130,7 @@ void index_delete(File_dir *file_dir, Vcb *vol_Blk,
 
         if (fileIdentifier == 0)
         {
-            printf("\nFile does not exist.");
+            printf("\nERROR - File is not within the system!\n");
             return;
         }
 
@@ -160,10 +165,11 @@ void index_delete(File_dir *file_dir, Vcb *vol_Blk,
 
             // Freeing up index block
             vol_Blk->freeBlock[indexOfindexBlock] = 0;
+            printf("\n");
             return;
         }
     }
     // This is unreachable unless file does not exist
-    printf("\nFile does not exist.");
+    printf("\nERROR - File is not within the system!\n");
     return;
 }

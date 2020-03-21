@@ -100,7 +100,7 @@ void blackOps_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
     }
     else 
     {
-        printf("ERROR - File size is too big. File not added.\n");
+        printf("\nERROR - File size is too big. File not added.\n");
     }
     
 }

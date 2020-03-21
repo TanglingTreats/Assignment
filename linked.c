@@ -109,6 +109,8 @@ void linked_add(File_dir *file_dir, Vcb *vol_Blk, Block *block_Array,
 
                 file_dir->linked_block[directoryIndex].start = blockPointerArr[0];
                 file_dir->linked_block[directoryIndex].end = blockPointerArr[blksNeeded - 1];
+
+                free(blockPointerArr);
             }
             else
             {

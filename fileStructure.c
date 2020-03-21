@@ -65,9 +65,9 @@ bool allocateBlock(Block **data, Vcb *vol_Blk, File_dir *dir)
         dir->ctg_block = (Ctg_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(Ctg_file_dir));
         dir->linked_block = (Linked_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(Linked_file_dir));
         dir->indexed_block = (Indexed_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(Indexed_file_dir));
-        dir->blackOps_block = (lindex_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(lindex_file_dir));
+        dir->lindex_block = (lindex_file_dir *)calloc(vol_Blk->numDirBlock * vol_Blk->blockSize, sizeof(lindex_file_dir));
 
-        if (dir->ctg_block == NULL || dir->linked_block == NULL || dir->indexed_block == NULL || dir->blackOps_block == NULL)
+        if (dir->ctg_block == NULL || dir->linked_block == NULL || dir->indexed_block == NULL || dir->lindex_block == NULL)
         {
             printAllocateError("file directory");
             return false;
@@ -153,9 +153,9 @@ int dirUpdator(File_dir *file_dir, Vcb *vol_Blk, char option, int identifier)
         if (identifier != -1)
             for (int i = 0; i < vol_Blk->numDirBlock * vol_Blk->blockSize; i++)
             {
-                if (file_dir->blackOps_block[i].identifier == 0)
+                if (file_dir->lindex_block[i].identifier == 0)
                 {
-                    file_dir->blackOps_block[i].identifier = identifier;
+                    file_dir->lindex_block[i].identifier = identifier;
                     // return file
                     return i;
                 }
@@ -230,9 +230,9 @@ bool flushFileData(File_dir *file_dir, Vcb *vol_Blk, int *entries)
         file_dir->indexed_block[i].identifier = 0;
         file_dir->indexed_block[i].pos = 0;
 
-        file_dir->blackOps_block[i].identifier = 0;
-        file_dir->blackOps_block[i].start = 0;
-        file_dir->blackOps_block[i].end = 0;
+        file_dir->lindex_block[i].identifier = 0;
+        file_dir->lindex_block[i].start = 0;
+        file_dir->lindex_block[i].end = 0;
     }
 
     for (i = 0; i < vol_Blk->numData * vol_Blk->blockSize; i++)

@@ -30,6 +30,8 @@ void freePointers(int *entries,Vcb *vcb, Block *block_Array, File_dir *file_dir,
 
 int main(int argc, char **argv)
 {
+    char *inputName;
+
     // block size for options
     int blkSize = -1;
 
@@ -64,6 +66,16 @@ int main(int argc, char **argv)
 
     // File pointer
     FILE *fp;
+
+    if(argc > 1)
+    {
+        inputName = argv[1];
+        printf("file name: %s\n", inputName);
+    }
+    else
+    {
+        printf("No input files specified. Resorting to default\n");
+    }
 
     printf("\n---------- Shrodinger's OS ------------\n");
     printf("\nWelcome User\n");
@@ -169,8 +181,15 @@ int main(int argc, char **argv)
     }
 
     // --------------- FILE READ SECTION --------------
-    // fp = fopen("CSC1007-SampleCSV.csv", "r");
-    fp = fopen("kai_test.csv", "r");
+    if(argc > 1)
+    {
+        fp = fopen(inputName, "r");
+    }
+    else
+    {
+        fp = fopen("CSC1007-SampleCSV.csv", "r");
+        //fp = fopen("kai_test.csv", "r");
+    }
     if (fp != NULL)
     {
         printf("\nFile open successful!\n");

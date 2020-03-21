@@ -87,6 +87,8 @@ int main(int argc, char **argv)
     {
         printf("\nWould you like to input block size or number of blocks? s/n: ");
         scanf(" %c", &option);
+        while (getchar() != '\n')
+            ; //Error-checking for character and string inputs
         if (option == 's' || option == 'S')
         {
             while (blkSize < 2 || blkSize > 65)
@@ -233,9 +235,11 @@ int main(int argc, char **argv)
 
             // Number of blocks needed to store a particular file
             int numOfBlocksNeeded = 0;
+            int loopCounter = 0;
             while (readFile(fp, comm, &fileInfo, &fileDataSize))
             {
-                // printf("\nThe command is: %s\n", comm);
+                // printf("\nNumber of loops: %i\n", loopCounter++);
+                // printf("The command is: %s\n", comm);
                 fileIdentifier = fileInfo[0];
 
                 //Loop through as long as there is a line to read
@@ -244,7 +248,15 @@ int main(int argc, char **argv)
                     int numOfBlocksNeeded = ceil(((float)fileDataSize - 1) / vol_Blk.blockSize);
 
                     // Initialise data of file
-                    fileData = &fileInfo[1];
+                    if(fileDataSize == 1)
+                    {
+                        fileData = (int *)calloc(1, sizeof(int));
+                    }
+                    else
+                    {
+                        fileData = &fileInfo[1];
+                        printf("\nData: %i", fileInfo[1]);
+                    }
 
                     if (choice == 0)
                     {
@@ -366,29 +378,29 @@ void printInputError()
 
 void freePointers(int *entries, Vcb *vcb, Block *block_Array, File_dir *file_dir, FILE *file)
 {
-    printf("\nFree contiguous\n");
     free(file_dir->ctg_block);
+    printf("\nFree contiguous\n");
 
-    printf("Free linked\n");
     free(file_dir->linked_block);
+    printf("Free linked\n");
 
-    printf("Free indexed\n");
     free(file_dir->indexed_block);
+    printf("Free indexed\n");
 
-    printf("Free blackops\n");
     free(file_dir->blackOps_block);
+    printf("Free blackops\n");
 
-    printf("Free vcb\n");
     free(vcb->freeBlock);
+    printf("Free vcb\n");
+
+    free(block_Array);
+    printf("Free blocks\n");
+
+    free(entries);
+    printf("Free entries\n");
 
     //unique file needs to be freed
 
-    printf("Free blocks\n");
-    free(block_Array);
-
-    printf("Free entries\n");
-    free(entries);
-
-    printf("Free file pointer\n");
     fclose(file);
+    printf("Free file pointer\n");
 }

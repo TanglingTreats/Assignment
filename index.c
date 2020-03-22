@@ -13,6 +13,7 @@ void index_add(File_dir *file_dir, Vcb *vol_Blk,
 {
     int accessCounter = 0;
     printf("\nAdding File: %d", identifier);
+
     // Size of blocks
     int blockSize = vol_Blk->blockSize;
     if (numberOfBlocksNeeded > vol_Blk->blockSize ||
@@ -36,19 +37,19 @@ void index_add(File_dir *file_dir, Vcb *vol_Blk,
     {
         // Get as many data blocks as needed for file
         int indexCurrentBlock = nextFreeSpaceIndex(vol_Blk, &accessCounter);
+
         // Insert block position into indexBlock
         entries[blockSize * (indexOfindexBlock - vol_Blk->numDirBlock) + block] = indexCurrentBlock;
+        
         // Updates directory to indicate block is used
         vol_Blk->freeBlock[indexCurrentBlock] = 1;
-        // Insert file data into data blocks
 
-        int i = 0;
-        while (dataIndex < numberOfData)
-        {
+        // Insert file data into data blocks
+        for (int i = 0; i < vol_Blk->blockSize; i++)
+            {
             entries[blockSize * (indexCurrentBlock - vol_Blk->numDirBlock) + i] = data[dataIndex];
             dataIndex++;
-            i++;
-        }
+            }
     }
     printf("\nAccess Count: %d\n", accessCounter);
     *accessCounts += accessCounter;

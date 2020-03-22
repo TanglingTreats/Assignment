@@ -11,7 +11,7 @@ option = "random"
 methodChoices = ["add", "delete", "read"]
 
 # parameters
-numberOfInstructions = 50
+numberOfInstructions = 100
 possiblefiles = [100, 200, 300, 400, 500, 600, 700, 800, 900]
 currentfiles= []
 

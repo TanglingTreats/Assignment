@@ -181,9 +181,11 @@ int checkFreeSpace(Vcb *vol_Blk, int *accessCounter)
 
 int nextFreeSpaceIndex(Vcb *vol_Blk, int *accessCounter)
 {
-    for (int i = 0; i < vol_Blk->numTotal; i++)
+    printf("\nChecking");
+    for (int i = vol_Blk->numDirBlock; i < vol_Blk->numTotal; i++)
     {
-        *accessCounter+=1;
+        *accessCounter += 1;
+        printf("\nIndex: %d, Value: %d",i, vol_Blk->freeBlock[i]);
         if (vol_Blk->freeBlock[i] == 0)
             return i;
     }
@@ -192,14 +194,14 @@ int nextFreeSpaceIndex(Vcb *vol_Blk, int *accessCounter)
 
 int freeSpaceIndex_contiguous(Vcb *vol_Blk, int blocksNeeded, int *accessCounter)
 {
-    for (int i = 0; i < vol_Blk->numTotal; i++)
+    for (int i = vol_Blk->numDirBlock; i < vol_Blk->numTotal - blocksNeeded; i++)
     {
         if (vol_Blk->freeBlock[i] == 0)
         {
             bool pass = true;
             for (int bN = 1; bN < blocksNeeded; bN++)
             {
-                if (vol_Blk->freeBlock[bN + i] == 1 || (bN + i) > vol_Blk->numTotal)
+                if (vol_Blk->freeBlock[bN + i] == 1)
                     pass = false;
             }
             if (pass == true)

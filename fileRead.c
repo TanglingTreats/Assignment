@@ -10,10 +10,12 @@
 bool readFile (FILE *file, char *comm, int **data, int *size)
 {
     char buf[1024];
-    char intBuf[3];
+    char *intBuf;
 
     bool setComm = false;
     bool setData = false;
+    
+    int intOfData = 0;
 
     if(fgets(buf, 1024, file))
     {
@@ -34,8 +36,20 @@ bool readFile (FILE *file, char *comm, int **data, int *size)
                     // Calculates length of remaining command
                     float remainLen = strlen(buf)-i-2; 
                     
-                    int sizeOfData = ceil(remainLen / 5);
+                    intOfData = 0;
+                    char *input = &buf[i+2];
 
+                    while(input[intOfData] >= '0' && input[intOfData] <= '9')
+                    {
+                    //    printf("This is an integer character %c\n", input[intOfData]);
+                        intOfData++;
+                    }
+
+                    int sizeOfData = ceil(remainLen / (intOfData + 2));
+                    
+                    //printf("\nSize of data: %i\n", sizeOfData);
+
+                    intBuf = (char *)calloc(intOfData, sizeof(char));
                     (*data) = (int *)calloc(sizeOfData, sizeof(int));
                     *size = sizeOfData;
 
@@ -53,15 +67,21 @@ bool readFile (FILE *file, char *comm, int **data, int *size)
 
             if(setData)
             {
-                intBuf[j] = buf[i];
-                j++;
-
-                if(j == 3)
+                if(buf[i] >= '0' && buf[i] <= '9')
                 {
-                    (*data)[k] = atoi(intBuf);
+                    intBuf[j] = buf[i];
+                    //printf("Buffer: %c\n", buf[i]);
+                    //printf("j: %i\n", j);
+                    j++;
 
-                    j = 0;
-                    k++; 
+                    if(j == intOfData)
+                    {
+                        (*data)[k] = atoi(intBuf);
+
+                     //   printf("Converted data: %i\n", (*data)[k]);
+                        j = 0;
+                        k++; 
+                    }
                 }
 
             }

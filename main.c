@@ -245,6 +245,7 @@ int main(int argc, char **argv)
                 // printf("\nNumber of loops: %i\n", loopCounter++);
                 // printf("The command is: %s\n", comm);
                 fileIdentifier = fileInfo[0];
+                //printf("fileIdentifier: %i\n", fileIdentifier);
 
                 //Loop through as long as there is a line to read
                 if (!strcmp(comm, "add"))

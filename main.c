@@ -195,6 +195,7 @@ int main(int argc, char **argv)
     {
         fp = fopen("test_file.csv", "r");
     }
+    // Check file pointer validity
     if (fp != NULL)
     {
         printf("\nFile open successful!\n");
@@ -217,12 +218,15 @@ int main(int argc, char **argv)
 
         // Read in an integer
         scanf("%d", &choice);
+        // Eliminates invalid input loop
         while (getchar() != '\n')
             ; //Error-checking for character and string inputs
 
         if (choice >= 0 && choice < 4)
         {
+            // Resets all data within structures
             flushFileData(&file_dir, &vol_Blk, entries);
+
             // Execute allocation methods etc.
             char comm[7];
 
@@ -242,8 +246,6 @@ int main(int argc, char **argv)
             int dataUtilisation = 0;
             while (readFile(fp, comm, &fileInfo, &fileDataSize))
             {
-                // printf("\nNumber of loops: %i\n", loopCounter++);
-                // printf("The command is: %s\n", comm);
                 fileIdentifier = fileInfo[0];
                 //printf("fileIdentifier: %i\n", fileIdentifier);
 
